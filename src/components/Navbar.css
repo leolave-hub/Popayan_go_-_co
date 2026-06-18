@@ -1,0 +1,100 @@
+:root {
+  --navbar-h: 64px;
+}
+
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 900;
+  height: var(--navbar-h);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 48px;
+  transition: background .28s ease, box-shadow .28s ease, backdrop-filter .28s;
+}
+
+/* ── Glass variant (home + not scrolled) ── */
+.navbar--glass {
+  background: rgba(15, 8, 3, .18);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: none;
+}
+
+/* ── Solid variant (scrolled or inner pages) ── */
+.navbar--solid {
+  background: var(--cream);
+  box-shadow: 0 1px 0 var(--cream-dk);
+}
+
+/* ── Logo ── */
+.navbar-logo {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -.25px;
+  transition: opacity .15s;
+}
+.navbar-logo:hover { opacity: .8; }
+
+.navbar--glass .navbar-logo { color: #fff; }
+.navbar--solid .navbar-logo { color: var(--stone); }
+
+.navbar-logo-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--terra);
+  flex-shrink: 0;
+  box-shadow: 0 0 0 2px rgba(181,120,90,.3);
+}
+
+/* ── Links ── */
+.navbar-links {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.nav-link {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 18px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  letter-spacing: .01em;
+  transition: background .15s, color .15s;
+}
+
+/* glass state */
+.navbar--glass .nav-link        { color: rgba(255,255,255,.78); }
+.navbar--glass .nav-link:hover  { background: rgba(255,255,255,.12); color: #fff; }
+.navbar--glass .nav-link--active {
+  background: rgba(255,255,255,.2);
+  color: #fff;
+  font-weight: 600;
+}
+
+/* solid state */
+.navbar--solid .nav-link        { color: var(--stone-lt); }
+.navbar--solid .nav-link:hover  { background: var(--cream-dk); color: var(--stone); }
+.navbar--solid .nav-link--active {
+  background: var(--terra);
+  color: var(--white);
+  font-weight: 600;
+}
+
+/* ── Responsive ── */
+@media (max-width: 640px) {
+  .navbar { padding: 0 20px; }
+  .navbar-logo { font-size: 15px; }
+  .nav-link { padding: 7px 12px; font-size: 13px; }
+}

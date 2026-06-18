@@ -1,26 +1,177 @@
-import { Link } from 'react-router-dom'
+import { useState } from 'react'
 import MapView from '../components/MapView'
-import heroImg from '../assets/hero.png'
+import heroImg from '../assets/hero.jpg'
 import './Home.css'
 
+const PREFERENCIAS = [
+  { label: 'Gastronomía', emoji: '🍽' },
+  { label: 'Turismo', emoji: '🗺' },
+  { label: 'Arte', emoji: '🎨' },
+  { label: 'Música', emoji: '🎶' },
+  { label: 'Cultura', emoji: '🏛' },
+  { label: 'Historia', emoji: '📜' },
+  { label: 'Naturaleza', emoji: '🌿' },
+  { label: 'Deportes', emoji: '⚽' },
+]
+
+const CATEGORIAS = ['Todo', 'Gastronomía', 'Arte', 'Música', 'Cultura', 'Turismo']
+
 export default function Home() {
+  const [categoriaActiva, setCategoriaActiva] = useState('Todo')
+  const [form, setForm] = useState({ origen: '', edad: '', preferencias: [] })
+  const [enviado, setEnviado] = useState(false)
+  const [modalAbierto, setModalAbierto] = useState(false)
+
+  const togglePref = (label) =>
+    setForm(prev => ({
+      ...prev,
+      preferencias: prev.preferencias.includes(label)
+        ? prev.preferencias.filter(p => p !== label)
+        : [...prev.preferencias, label],
+    }))
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    setEnviado(true)
+  }
+
+  const cerrarModal = () => {
+    setModalAbierto(false)
+    setEnviado(false)
+    setForm({ origen: '', edad: '', preferencias: [] })
+  }
+
   return (
     <main>
+      {/* ── Hero ── */}
       <section className="hero" style={{ backgroundImage: `url(${heroImg})` }}>
         <div className="hero-overlay">
-          <div className="hero-text">
-            <h1>Descubre la Magia de Popayán</h1>
-            <p>La Ciudad Blanca te espera con su historia, cultura y tradición</p>
-          </div>
-          <Link to="/registro" className="btn-registro">
-            Registro
-          </Link>
+          <span className="hero-tag">Popayán · Colombia</span>
+          <h1>La Ciudad Blanca</h1>
+          <p>Historia, cultura y tradición</p>
         </div>
       </section>
 
-      <section className="map-section">
-        <MapView />
+      {/* ── Mapa ── */}
+      <section className="mapa-section">
+        <div className="mapa-header">
+          <h2>Mapa interactivo</h2>
+          <div className="filtros">
+            {CATEGORIAS.map(cat => (
+              <button
+                key={cat}
+                className={`filtro-chip${categoriaActiva === cat ? ' activo' : ''}`}
+                onClick={() => setCategoriaActiva(cat)}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+        </div>
+        <div className="mapa-wrap">
+          <MapView />
+        </div>
       </section>
+
+      {/* ── CTA ── */}
+      <section className="cta-section">
+        <div className="cta-encuesta">
+          <p className="cta-label">Experiencia personalizada</p>
+          <h2>¿Cómo es tu visita a Popayán?</h2>
+          <p className="cta-desc">
+            Comparte tus intereses y ayúdanos a ofrecerte una mejor experiencia en la ciudad.
+          </p>
+          <button className="btn-abrir-encuesta" onClick={() => setModalAbierto(true)}>
+            Ayúdanos a mejorar · Cuéntanos sobre ti
+          </button>
+        </div>
+
+        <div className="cta-divider" />
+
+        <div className="cta-registro">
+          <p className="cta-label">¿Quieres guardar tu experiencia?</p>
+          <h3>Crea tu cuenta</h3>
+          <p className="cta-desc">
+            Guarda tus lugares favoritos y recibe recomendaciones personalizadas.
+          </p>
+          <button className="btn-registro">
+            Registro
+          </button>
+        </div>
+      </section>
+
+      {/* ── Modal encuesta ── */}
+      {modalAbierto && (
+        <div className="modal-overlay" onClick={cerrarModal}>
+          <div className="modal-content" onClick={e => e.stopPropagation()}>
+            <button className="modal-close" onClick={cerrarModal}>✕</button>
+
+            {enviado ? (
+              <div className="form-success">
+                <div className="success-icon">✓</div>
+                <p>¡Gracias! Disfruta de tu experiencia.</p>
+                <button className="btn-enviar" style={{ marginTop: 16 }} onClick={cerrarModal}>
+                  Cerrar
+                </button>
+              </div>
+            ) : (
+              <>
+                <div className="modal-header">
+                  <h2>Cuéntanos sobre ti</h2>
+                  <p>Tus respuestas nos ayudan a mejorar Popayán Go</p>
+                </div>
+
+                <form className="postulate-form" onSubmit={handleSubmit}>
+                  <div className="form-group">
+                    <label>¿De dónde eres?</label>
+                    <input
+                      type="text"
+                      placeholder="Ciudad o país de origen"
+                      value={form.origen}
+                      onChange={e => setForm(p => ({ ...p, origen: e.target.value }))}
+                      required
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label>¿Qué edad tienes?</label>
+                    <input
+                      type="number"
+                      placeholder="Edad"
+                      min="1"
+                      max="120"
+                      value={form.edad}
+                      onChange={e => setForm(p => ({ ...p, edad: e.target.value }))}
+                      required
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label>¿Qué te interesa?</label>
+                    <div className="prefs-grid">
+                      {PREFERENCIAS.map(({ label, emoji }) => (
+                        <button
+                          type="button"
+                          key={label}
+                          className={`pref-chip${form.preferencias.includes(label) ? ' sel' : ''}`}
+                          onClick={() => togglePref(label)}
+                        >
+                          <span className="pref-emoji">{emoji}</span>
+                          {label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <button type="submit" className="btn-enviar">
+                    Continuar →
+                  </button>
+                </form>
+              </>
+            )}
+          </div>
+        </div>
+      )}
     </main>
   )
 }

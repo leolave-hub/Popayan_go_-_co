@@ -1,102 +1,480 @@
-/* ── Hero ── */
+/* ─────────────────────────────────────────
+   TOKENS
+───────────────────────────────────────── */
+:root {
+  --cream:    #F7F2EA;
+  --cream-dk: #EEE6D8;
+  --stone:    #3D2E22;
+  --stone-lt: #7A6657;
+  --terra:    #B5785A;
+  --terra-lt: #D4977A;
+  --sage:     #7BAF8A;
+  --sage-lt:  #A8CDB4;
+  --white:    #FFFFFF;
+  --radius:   14px;
+  --shadow:   0 2px 20px rgba(61,46,34,.08);
+}
+
+/* ─────────────────────────────────────────
+   HERO
+───────────────────────────────────────── */
 .hero {
   position: relative;
   width: 100%;
   height: 100vh;
   background-size: cover;
   background-position: center;
-  background-repeat: no-repeat;
 }
 
 .hero-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    135deg,
-    rgba(0, 0, 0, 0.55) 0%,
-    rgba(10, 30, 60, 0.45) 100%
-  );
+  background: linear-gradient(160deg, rgba(30,18,10,.38) 0%, rgba(61,46,34,.60) 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-end;
+  padding: 64px 72px;
+  gap: 10px;
+}
+
+.hero-tag {
+  display: inline-block;
+  background: rgba(255,255,255,.18);
+  backdrop-filter: blur(6px);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  padding: 6px 16px;
+  border-radius: 40px;
+  border: 1px solid rgba(255,255,255,.3);
+  margin-bottom: 6px;
+}
+
+.hero-overlay h1 {
+  font-size: clamp(42px, 7vw, 80px);
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.05;
+  letter-spacing: -1.5px;
+  margin: 0;
+  text-shadow: 0 2px 16px rgba(0,0,0,.3);
+}
+
+.hero-overlay p {
+  font-size: clamp(15px, 2vw, 20px);
+  color: rgba(255,255,255,.82);
+  margin: 0;
+  font-weight: 400;
+}
+
+/* ─────────────────────────────────────────
+   MAPA CULTURAL
+───────────────────────────────────────── */
+.mapa-section {
+  background: var(--cream);
+  display: flex;
+  flex-direction: column;
+}
+
+.mapa-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 60px;
-  gap: 40px;
+  padding: 36px 48px 20px;
+  gap: 20px;
+  flex-wrap: wrap;
 }
 
-.hero-text {
-  max-width: 600px;
-}
-
-.hero-text h1 {
-  font-size: 56px;
+.mapa-header h2 {
+  font-size: 26px;
   font-weight: 700;
-  color: #ffffff;
-  line-height: 1.1;
-  letter-spacing: -1px;
-  margin: 0 0 16px;
-  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+  color: var(--stone);
+  margin: 0;
+  letter-spacing: -.4px;
 }
 
-.hero-text p {
-  font-size: 20px;
-  color: rgba(255, 255, 255, 0.88);
-  line-height: 1.5;
-  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.35);
+.filtros {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
-/* ── Registro button ── */
-.btn-registro {
-  display: inline-flex;
+.filtro-chip {
+  padding: 7px 18px;
+  border-radius: 40px;
+  border: 1.5px solid var(--cream-dk);
+  background: var(--white);
+  color: var(--stone-lt);
+  font-size: 13.5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all .18s ease;
+}
+
+.filtro-chip:hover {
+  border-color: var(--terra-lt);
+  color: var(--terra);
+}
+
+.filtro-chip.activo {
+  background: var(--terra);
+  border-color: var(--terra);
+  color: var(--white);
+}
+
+.mapa-wrap {
+  width: 100%;
+  height: 70vh;
+  min-height: 420px;
+}
+
+/* ─────────────────────────────────────────
+   CTA SECTION
+───────────────────────────────────────── */
+.cta-section {
+  background: var(--white);
+  padding: 80px 48px;
+  display: flex;
   align-items: center;
-  justify-content: center;
-  padding: 14px 36px;
-  background: #aa3bff;
-  color: #ffffff;
-  font-size: 16px;
+  gap: 0;
+  max-width: 1100px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.cta-encuesta,
+.cta-registro {
+  flex: 1;
+  padding: 40px 48px;
+}
+
+.cta-label {
+  font-size: 12px;
   font-weight: 600;
-  border-radius: 8px;
-  text-decoration: none;
-  white-space: nowrap;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--terra);
+  margin: 0 0 12px;
+}
+
+.cta-encuesta h2 {
+  font-size: clamp(22px, 3vw, 30px);
+  font-weight: 700;
+  color: var(--stone);
+  margin: 0 0 12px;
+  letter-spacing: -.4px;
+  line-height: 1.2;
+}
+
+.cta-registro h3 {
+  font-size: clamp(20px, 2.5vw, 26px);
+  font-weight: 700;
+  color: var(--stone);
+  margin: 0 0 12px;
+  letter-spacing: -.3px;
+}
+
+.cta-desc {
+  font-size: 15px;
+  color: var(--stone-lt);
+  margin: 0 0 28px;
+  line-height: 1.6;
+}
+
+.btn-abrir-encuesta {
+  display: inline-block;
+  padding: 14px 28px;
+  background: var(--terra);
+  color: var(--white);
+  border: none;
+  border-radius: var(--radius);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .18s, transform .12s;
+  letter-spacing: .01em;
+}
+
+.btn-abrir-encuesta:hover {
+  background: var(--terra-lt);
+  transform: translateY(-1px);
+}
+
+.btn-abrir-encuesta:active {
+  transform: translateY(0);
+}
+
+.cta-divider {
+  width: 1px;
+  height: 180px;
+  background: var(--cream-dk);
   flex-shrink: 0;
-  transition: background 0.2s ease, transform 0.15s ease;
-  box-shadow: 0 4px 20px rgba(170, 59, 255, 0.45);
+}
+
+.btn-registro {
+  display: inline-block;
+  padding: 13px 32px;
+  background: transparent;
+  color: var(--stone);
+  border: 2px solid var(--stone);
+  border-radius: var(--radius);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .18s, color .18s, transform .12s;
+  letter-spacing: .01em;
 }
 
 .btn-registro:hover {
-  background: #c966ff;
-  transform: translateY(-2px);
+  background: var(--stone);
+  color: var(--white);
+  transform: translateY(-1px);
 }
 
 .btn-registro:active {
   transform: translateY(0);
 }
 
-/* ── Map section ── */
-.map-section {
-  width: 100%;
-  height: 100vh;
+/* ─────────────────────────────────────────
+   MODAL
+───────────────────────────────────────── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(30, 18, 10, .55);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 24px;
 }
 
-/* ── Responsive ── */
+.modal-content {
+  background: var(--cream);
+  border-radius: 24px;
+  padding: 52px 48px;
+  width: 100%;
+  max-width: 520px;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 8px 48px rgba(30,18,10,.22);
+  animation: modal-in .22s ease;
+}
+
+@keyframes modal-in {
+  from { opacity: 0; transform: translateY(16px) scale(.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.modal-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1.5px solid var(--cream-dk);
+  background: var(--white);
+  color: var(--stone-lt);
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all .15s;
+  line-height: 1;
+}
+
+.modal-close:hover {
+  background: var(--stone);
+  color: var(--white);
+  border-color: var(--stone);
+}
+
+.modal-header {
+  margin-bottom: 32px;
+}
+
+.modal-header h2 {
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--stone);
+  margin: 0 0 6px;
+  letter-spacing: -.4px;
+}
+
+.modal-header p {
+  font-size: 14px;
+  color: var(--stone-lt);
+  margin: 0;
+}
+
+/* ─────────────────────────────────────────
+   FORM (dentro del modal)
+───────────────────────────────────────── */
+.postulate-form {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.form-group label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--stone);
+  letter-spacing: .02em;
+}
+
+.form-group input {
+  padding: 12px 16px;
+  border: 1.5px solid var(--cream-dk);
+  border-radius: var(--radius);
+  background: var(--white);
+  font-size: 15px;
+  color: var(--stone);
+  outline: none;
+  transition: border-color .18s;
+}
+
+.form-group input:focus {
+  border-color: var(--terra);
+}
+
+.form-group input::placeholder {
+  color: #BFB3A8;
+}
+
+/* ── Preferencias ── */
+.prefs-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.pref-chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 18px;
+  border-radius: 40px;
+  border: 1.5px solid var(--cream-dk);
+  background: var(--white);
+  color: var(--stone-lt);
+  font-size: 13.5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all .18s ease;
+}
+
+.pref-chip:hover {
+  border-color: var(--sage);
+  color: var(--sage);
+}
+
+.pref-chip.sel {
+  background: var(--sage);
+  border-color: var(--sage);
+  color: var(--white);
+}
+
+.pref-emoji {
+  font-size: 15px;
+}
+
+/* ── Submit ── */
+.btn-enviar {
+  padding: 14px 0;
+  background: var(--terra);
+  color: var(--white);
+  border: none;
+  border-radius: var(--radius);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .18s, transform .12s;
+  letter-spacing: .02em;
+  width: 100%;
+}
+
+.btn-enviar:hover {
+  background: var(--terra-lt);
+  transform: translateY(-1px);
+}
+
+.btn-enviar:active {
+  transform: translateY(0);
+}
+
+/* ── Success ── */
+.form-success {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 48px 0 24px;
+  text-align: center;
+}
+
+.success-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--sage);
+  color: #fff;
+  font-size: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.form-success p {
+  color: var(--stone);
+  font-size: 16px;
+  font-weight: 500;
+  margin: 0;
+}
+
+/* ─────────────────────────────────────────
+   RESPONSIVE
+───────────────────────────────────────── */
 @media (max-width: 768px) {
   .hero-overlay {
+    padding: 40px 28px;
+  }
+
+  .mapa-header {
+    padding: 28px 24px 16px;
     flex-direction: column;
     align-items: flex-start;
-    justify-content: flex-end;
-    padding: 40px 28px;
-    gap: 24px;
   }
 
-  .hero-text h1 {
-    font-size: 34px;
+  .cta-section {
+    flex-direction: column;
+    padding: 48px 24px;
   }
 
-  .hero-text p {
-    font-size: 16px;
+  .cta-encuesta,
+  .cta-registro {
+    padding: 32px 0;
   }
 
-  .btn-registro {
-    align-self: flex-start;
-    padding: 12px 28px;
+  .cta-divider {
+    width: 100%;
+    height: 1px;
+  }
+
+  .modal-content {
+    padding: 36px 24px;
   }
 }
