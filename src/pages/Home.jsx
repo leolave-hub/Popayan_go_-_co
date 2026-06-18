@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import MapView from '../components/MapView'
 import heroImg from '../assets/hero.jpg'
-import './Home.css'
 
 const PREFERENCIAS = [
   { label: 'Gastronomía', emoji: '🍽' },
@@ -32,6 +31,9 @@ export default function Home() {
 
   const handleSubmit = (e) => {
     e.preventDefault()
+    const anteriores = JSON.parse(localStorage.getItem('popayan_encuestas') || '[]')
+    anteriores.push({ ...form, fecha: new Date().toISOString() })
+    localStorage.setItem('popayan_encuestas', JSON.stringify(anteriores))
     setEnviado(true)
   }
 
@@ -126,7 +128,7 @@ export default function Home() {
                     <label>¿De dónde eres?</label>
                     <input
                       type="text"
-                      placeholder="Ciudad o país de origen"
+                      placeholder="País de origen"
                       value={form.origen}
                       onChange={e => setForm(p => ({ ...p, origen: e.target.value }))}
                       required

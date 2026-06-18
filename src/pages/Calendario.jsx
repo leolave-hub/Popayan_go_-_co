@@ -1,6 +1,5 @@
 import { useState, useMemo } from 'react'
 import { EVENTOS, CATEGORIAS_INFO } from '../data/eventos'
-import './Calendario.css'
 
 const MESES = [
   'Enero','Febrero','Marzo','Abril','Mayo','Junio',
@@ -36,18 +35,16 @@ export default function Calendario() {
   const [diaActivo, setDiaActivo] = useState(hoySt)
   const [lunesRef, setLunesRef] = useState(() => getLunesDe(hoy))
 
-  /* ── Month grid cells ── */
   const celdasMes = useMemo(() => {
     const primer = new Date(anio, mes, 1)
     const ultimo = new Date(anio, mes + 1, 0)
-    const pad = (primer.getDay() + 6) % 7 // Monday-first
+    const pad = (primer.getDay() + 6) % 7
     const cells = []
     for (let i = 0; i < pad; i++) cells.push(null)
     for (let d = 1; d <= ultimo.getDate(); d++) cells.push(new Date(anio, mes, d))
     return cells
   }, [anio, mes])
 
-  /* ── Week days ── */
   const diasSemana = useMemo(() =>
     Array.from({ length: 7 }, (_, i) => {
       const d = new Date(lunesRef)
@@ -56,7 +53,6 @@ export default function Calendario() {
     }),
   [lunesRef])
 
-  /* ── Navigation ── */
   const prevMes = () => { if (mes === 0) { setMes(11); setAnio(a => a - 1) } else setMes(m => m - 1) }
   const nextMes = () => { if (mes === 11) { setMes(0); setAnio(a => a + 1) } else setMes(m => m + 1) }
   const prevSem = () => { const d = new Date(lunesRef); d.setDate(d.getDate() - 7); setLunesRef(d) }
@@ -79,7 +75,6 @@ export default function Calendario() {
     setLunesRef(getLunesDe(hoy))
   }
 
-  /* ── Labels ── */
   const semanaLabel = () => {
     const dom = new Date(lunesRef)
     dom.setDate(lunesRef.getDate() + 6)
@@ -111,15 +106,13 @@ export default function Calendario() {
       </div>
 
       <div className={`cal-layout${vista === 'mes' ? ' cal-layout--split' : ''}`}>
-        {/* ── Main ── */}
         <div className="cal-main">
           <div className="cal-toolbar">
             <div className="cal-nav-group">
-              <button className="cal-nav-btn" onClick={prevAction} aria-label="Anterior">‹</button>
+              <button className="cal-nav-btn" onClick={prevAction}>‹</button>
               <span className="cal-periodo">{periodoLabel}</span>
-              <button className="cal-nav-btn" onClick={nextAction} aria-label="Siguiente">›</button>
+              <button className="cal-nav-btn" onClick={nextAction}>›</button>
             </div>
-
             <div className="cal-toolbar-right">
               <button className="cal-hoy-btn" onClick={irHoy}>Hoy</button>
               <div className="cal-vistas">
@@ -136,7 +129,7 @@ export default function Calendario() {
             </div>
           </div>
 
-          {/* ── Month view ── */}
+          {/* Vista mes */}
           {vista === 'mes' && (
             <div className="cal-mes">
               <div className="cal-dias-header">
@@ -163,7 +156,11 @@ export default function Calendario() {
                             <span
                               key={e.id}
                               className="cal-ev-pill"
-                              style={{ background: info?.color + '28', color: info?.color, borderLeft: `2px solid ${info?.color}` }}
+                              style={{
+                                background: info?.color + '28',
+                                color: info?.color,
+                                borderLeft: `2px solid ${info?.color}`,
+                              }}
                             >
                               {e.titulo.length > 15 ? e.titulo.slice(0, 15) + '…' : e.titulo}
                             </span>
@@ -180,7 +177,7 @@ export default function Calendario() {
             </div>
           )}
 
-          {/* ── Week view ── */}
+          {/* Vista semana */}
           {vista === 'semana' && (
             <div className="cal-semana">
               {diasSemana.map((fecha) => {
@@ -222,16 +219,15 @@ export default function Calendario() {
             </div>
           )}
 
-          {/* ── Day view ── */}
+          {/* Vista día */}
           {vista === 'dia' && (
             <div className="cal-dia-vista">
               <h2 className="cal-dia-fecha">{diaLabel()}</h2>
               {eventosActivos.length === 0
                 ? (
                   <div className="cal-dia-vacio">
-                    <span className="cal-dia-vacio-icono">📅</span>
-                    <p>No hay eventos programados para este día</p>
-                    <span className="cal-dia-vacio-hint">Prueba navegar a otra fecha con las flechas</span>
+                    <p className="cal-dia-vacio-texto">No hay eventos programados para este día</p>
+                    <span className="cal-dia-vacio-hint">Navega a otra fecha con las flechas</span>
                   </div>
                 )
                 : (
@@ -245,7 +241,7 @@ export default function Calendario() {
                           style={{ borderLeft: `4px solid ${info?.color}` }}
                         >
                           <div className="cal-dia-ev-top">
-                            <span className="cal-dia-ev-icono">{info?.icono}</span>
+                            <span className="cal-dia-ev-dot" style={{ background: info?.color }} />
                             <div>
                               <span className="cal-dia-ev-cat" style={{ color: info?.color }}>
                                 {e.categoria}
@@ -254,8 +250,8 @@ export default function Calendario() {
                             </div>
                           </div>
                           <div className="cal-dia-ev-meta">
-                            <span>🕐 {e.hora}</span>
-                            <span>📍 {e.lugar}</span>
+                            <span><strong>Hora:</strong> {e.hora}</span>
+                            <span><strong>Lugar:</strong> {e.lugar}</span>
                           </div>
                           <p className="cal-dia-ev-desc">{e.descripcion}</p>
                         </div>
@@ -268,7 +264,7 @@ export default function Calendario() {
           )}
         </div>
 
-        {/* ── Sidebar (month view only) ── */}
+        {/* Sidebar (solo vista mes) */}
         {vista === 'mes' && (
           <aside className="cal-aside">
             <h3 className="cal-aside-titulo">
@@ -280,7 +276,6 @@ export default function Calendario() {
             {eventosActivos.length === 0
               ? (
                 <div className="cal-aside-vacio">
-                  <span>📅</span>
                   <p>Sin eventos este día</p>
                 </div>
               )
@@ -295,12 +290,12 @@ export default function Calendario() {
                         style={{ borderLeft: `3px solid ${info?.color}` }}
                       >
                         <div className="cal-aside-cat" style={{ color: info?.color }}>
-                          {info?.icono} {e.categoria}
+                          {e.categoria}
                         </div>
                         <div className="cal-aside-nombre">{e.titulo}</div>
                         <div className="cal-aside-meta">
-                          <span>🕐 {e.hora}</span>
-                          <span>📍 {e.lugar}</span>
+                          <span>Hora: {e.hora}</span>
+                          <span>Lugar: {e.lugar}</span>
                         </div>
                       </div>
                     )

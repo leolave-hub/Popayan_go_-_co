@@ -93,8 +93,23 @@
 }
 
 /* ── Responsive ── */
+/* ── Separador y link de admin ── */
+.navbar-sep {
+  width: 1px;
+  height: 18px;
+  background: currentColor;
+  opacity: .2;
+  margin: 0 6px;
+  flex-shrink: 0;
+}
+
+/* admin link hereda los mismos estilos de .nav-link pero puede diferenciarse */
+.navbar--glass .nav-link--admin { color: rgba(255,255,255,.65); }
+.navbar--solid .nav-link--admin { color: var(--stone-lt); }
+
 @media (max-width: 640px) {
   .navbar { padding: 0 20px; }
   .navbar-logo { font-size: 15px; }
   .nav-link { padding: 7px 12px; font-size: 13px; }
+  .navbar-sep { margin: 0 2px; }
 }

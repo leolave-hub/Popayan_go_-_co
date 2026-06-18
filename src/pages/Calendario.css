@@ -345,14 +345,13 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   padding: 64px 0;
   color: var(--stone-lt);
   text-align: center;
 }
-.cal-dia-vacio-icono { font-size: 40px; }
-.cal-dia-vacio p { font-size: 15px; margin: 0; }
-.cal-dia-vacio-hint { font-size: 13px; color: var(--stone-lt); opacity: .7; }
+.cal-dia-vacio-texto { font-size: 15px; margin: 0; }
+.cal-dia-vacio-hint { font-size: 13px; color: var(--stone-lt); opacity: .7; margin: 0; }
 
 .cal-dia-lista {
   display: flex;
@@ -372,14 +371,16 @@
 .cal-dia-ev-top {
   display: flex;
   align-items: flex-start;
-  gap: 14px;
+  gap: 12px;
   margin-bottom: 12px;
 }
 
-.cal-dia-ev-icono {
-  font-size: 28px;
-  line-height: 1;
+.cal-dia-ev-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
   flex-shrink: 0;
+  margin-top: 5px;
 }
 
 .cal-dia-ev-cat {
@@ -438,16 +439,12 @@
 }
 
 .cal-aside-vacio {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
   padding: 32px 0;
+  text-align: center;
   color: var(--stone-lt);
   font-size: 13px;
+  font-style: italic;
 }
-.cal-aside-vacio span { font-size: 28px; }
-.cal-aside-vacio p { margin: 0; }
 
 .cal-aside-lista { display: flex; flex-direction: column; gap: 12px; }
 

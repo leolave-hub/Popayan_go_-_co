@@ -1,6 +1,5 @@
 import { Link, useLocation } from 'react-router-dom'
 import { useEffect, useState } from 'react'
-import './Navbar.css'
 
 const NAV_LINKS = [
   { label: 'Home',       to: '/' },
@@ -39,6 +38,15 @@ export default function Navbar() {
             {label}
           </Link>
         ))}
+
+        <span className="navbar-sep" />
+
+        <Link
+          to="/secretaria"
+          className={`nav-link nav-link--admin${pathname === '/secretaria' ? ' nav-link--active' : ''}`}
+        >
+          Secretaría
+        </Link>
       </div>
     </nav>
   )

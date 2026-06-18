@@ -1,6 +1,5 @@
 import { useState, useMemo } from 'react'
 import { EVENTOS, CATEGORIAS_INFO } from '../data/eventos'
-import './Eventos.css'
 
 const FILTROS_CAT = ['Todo', 'Música', 'Arte', 'Gastronomía', 'Cultura', 'Turismo', 'Deportes']
 const FILTROS_EST = ['Todo', 'En curso', 'Próximo', 'Finalizado']
@@ -51,7 +50,6 @@ export default function Eventos() {
       </div>
 
       <div className="ev-container">
-        {/* ── Filtros ── */}
         <div className="ev-filtros-bar">
           <div className="ev-filtro-grupo">
             <span className="ev-filtro-label">Categoría</span>
@@ -60,11 +58,11 @@ export default function Eventos() {
                 <button
                   key={f}
                   className={`ev-chip${cat === f ? ' activo' : ''}`}
+                  style={cat === f && f !== 'Todo' && CATEGORIAS_INFO[f]
+                    ? { background: CATEGORIAS_INFO[f].color, borderColor: CATEGORIAS_INFO[f].color, color: '#fff' }
+                    : undefined}
                   onClick={() => setCat(f)}
                 >
-                  {f !== 'Todo' && CATEGORIAS_INFO[f] && (
-                    <span className="ev-chip-icono">{CATEGORIAS_INFO[f].icono}</span>
-                  )}
                   {f}
                 </button>
               ))}
@@ -77,7 +75,7 @@ export default function Eventos() {
               {FILTROS_EST.map(e => (
                 <button
                   key={e}
-                  className={`ev-chip ev-chip--estado ev-chip--${e.toLowerCase().replace(' ', '-')}${est === e ? ' activo' : ''}`}
+                  className={`ev-chip${est === e ? ' activo' : ''}`}
                   onClick={() => setEst(e)}
                 >
                   {e}
@@ -87,11 +85,9 @@ export default function Eventos() {
           </div>
         </div>
 
-        {/* ── Resultados ── */}
         {filtrados.length === 0
           ? (
             <div className="ev-vacio">
-              <span>🔍</span>
               <h3>Sin resultados</h3>
               <p>No se encontraron eventos con los filtros seleccionados</p>
               <button className="ev-reset" onClick={() => { setCat('Todo'); setEst('Todo') }}>
@@ -113,39 +109,32 @@ export default function Eventos() {
                     <div key={ev.id} className="ev-card">
                       <div
                         className="ev-card-banner"
-                        style={{ background: `linear-gradient(135deg, ${info?.color}DD 0%, ${info?.color}88 100%)` }}
+                        style={{ background: `linear-gradient(135deg, ${info?.color}DD 0%, ${info?.color}77 100%)` }}
                       >
-                        <span className="ev-banner-icono">{info?.icono}</span>
+                        <span className="ev-banner-cat">{ev.categoria}</span>
                         <span className={`ev-estado-badge ev-estado--${estado.toLowerCase().replace(' ', '-')}`}>
                           {estado}
                         </span>
                       </div>
 
                       <div className="ev-card-body">
-                        <span
-                          className="ev-cat-badge"
-                          style={{ color: info?.color, background: info?.color + '22' }}
-                        >
-                          {ev.categoria}
-                        </span>
-
                         <h3 className="ev-titulo">{ev.titulo}</h3>
 
                         <div className="ev-meta">
                           <div className="ev-meta-row">
-                            <span className="ev-meta-icono">📅</span>
+                            <span className="ev-meta-key">Fecha</span>
                             <span>
                               {mismaFecha
                                 ? formatFecha(ev.fechaInicio)
-                                : `${formatFecha(ev.fechaInicio)} – ${formatFecha(ev.fechaFin)}`}
+                                : `${formatFecha(ev.fechaInicio)} — ${formatFecha(ev.fechaFin)}`}
                             </span>
                           </div>
                           <div className="ev-meta-row">
-                            <span className="ev-meta-icono">🕐</span>
+                            <span className="ev-meta-key">Hora</span>
                             <span>{ev.hora}</span>
                           </div>
                           <div className="ev-meta-row">
-                            <span className="ev-meta-icono">📍</span>
+                            <span className="ev-meta-key">Lugar</span>
                             <span>{ev.lugar}</span>
                           </div>
                         </div>

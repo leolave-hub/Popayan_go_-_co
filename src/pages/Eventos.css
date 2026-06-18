@@ -151,10 +151,12 @@
   position: relative;
 }
 
-.ev-banner-icono {
-  font-size: 42px;
-  line-height: 1;
-  filter: drop-shadow(0 2px 4px rgba(0,0,0,.15));
+.ev-banner-cat {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .14em;
+  color: rgba(255,255,255,.85);
 }
 
 /* Estado badge */
@@ -210,14 +212,23 @@
 
 .ev-meta-row {
   display: flex;
-  align-items: flex-start;
-  gap: 7px;
+  align-items: baseline;
+  gap: 6px;
   font-size: 13px;
   color: var(--stone-lt);
   line-height: 1.4;
 }
 
-.ev-meta-icono { flex-shrink: 0; margin-top: 1px; }
+.ev-meta-key {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--stone-lt);
+  opacity: .7;
+  flex-shrink: 0;
+  min-width: 36px;
+}
 
 .ev-desc {
   font-size: 13.5px;
@@ -238,7 +249,6 @@
   padding: 80px 20px;
   text-align: center;
 }
-.ev-vacio span { font-size: 48px; }
 .ev-vacio h3 { font-size: 20px; font-weight: 700; color: var(--stone); margin: 0; }
 .ev-vacio p  { font-size: 14px; color: var(--stone-lt); margin: 0; }
 
