@@ -1,5 +1,14 @@
-import MapView from './components/MapView'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import Home from './pages/Home'
+import RegistroTurista from './pages/turista/RegistroTurista'
 
 export default function App() {
-  return <MapView />
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/registro" element={<RegistroTurista />} />
+      </Routes>
+    </BrowserRouter>
+  )
 }

@@ -1,0 +1,199 @@
+/* ── Page wrapper ── */
+.registro-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+/* ── Card ── */
+.registro-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 48px 52px;
+  width: 100%;
+  max-width: 720px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+  position: relative;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  color: #aa3bff;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 24px;
+  transition: color 0.15s;
+}
+
+.back-link:hover {
+  color: #8a2be2;
+}
+
+/* ── Header ── */
+.registro-header {
+  margin-bottom: 36px;
+}
+
+.registro-header h1 {
+  font-size: 30px;
+  font-weight: 700;
+  color: #08060d;
+  margin: 0 0 8px;
+  letter-spacing: -0.5px;
+}
+
+.registro-header p {
+  font-size: 15px;
+  color: #6b6375;
+}
+
+/* ── Form layout ── */
+.registro-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-group.full-width {
+  grid-column: 1 / -1;
+}
+
+/* ── Labels & inputs ── */
+label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #08060d;
+  letter-spacing: 0.1px;
+}
+
+input,
+select {
+  padding: 11px 14px;
+  border: 1.5px solid #e5e4e7;
+  border-radius: 8px;
+  font-size: 15px;
+  color: #08060d;
+  background: #fafafa;
+  outline: none;
+  transition: border-color 0.18s, box-shadow 0.18s;
+  font-family: inherit;
+}
+
+input::placeholder {
+  color: #b0adb5;
+}
+
+input:focus,
+select:focus {
+  border-color: #aa3bff;
+  box-shadow: 0 0 0 3px rgba(170, 59, 255, 0.15);
+  background: #fff;
+}
+
+select {
+  cursor: pointer;
+}
+
+/* ── Submit button ── */
+.btn-submit {
+  margin-top: 8px;
+  padding: 14px;
+  background: #aa3bff;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s;
+  box-shadow: 0 4px 18px rgba(170, 59, 255, 0.4);
+  font-family: inherit;
+}
+
+.btn-submit:hover {
+  background: #c966ff;
+  transform: translateY(-2px);
+}
+
+.btn-submit:active {
+  transform: translateY(0);
+}
+
+/* ── Success state ── */
+.success-card {
+  text-align: center;
+  padding: 64px 52px;
+}
+
+.success-icon {
+  width: 72px;
+  height: 72px;
+  background: #aa3bff;
+  color: #fff;
+  font-size: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 24px;
+}
+
+.success-card h2 {
+  font-size: 28px;
+  color: #08060d;
+  margin: 0 0 12px;
+}
+
+.success-card p {
+  font-size: 16px;
+  color: #6b6375;
+  margin-bottom: 32px;
+}
+
+.btn-volver {
+  display: inline-flex;
+  padding: 13px 32px;
+  background: #aa3bff;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+
+.btn-volver:hover {
+  background: #c966ff;
+}
+
+/* ── Responsive ── */
+@media (max-width: 640px) {
+  .registro-card {
+    padding: 32px 24px;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .registro-header h1 {
+    font-size: 24px;
+  }
+}

@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import mapboxgl from 'mapbox-gl'
 import 'mapbox-gl/dist/mapbox-gl.css'
 
@@ -10,35 +10,52 @@ const INITIAL_BEARING = -17
 export default function MapView() {
   const containerRef = useRef(null)
   const mapRef = useRef(null)
+  const [error, setError] = useState(null)
 
   useEffect(() => {
-    mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN
+    const token = import.meta.env.VITE_MAPBOX_TOKEN
+    if (!token || token === 'your_mapbox_token_here') {
+      setError('Falta el token de Mapbox. Agrega VITE_MAPBOX_TOKEN en tu archivo .env')
+      return
+    }
 
-    const map = new mapboxgl.Map({
-      container: containerRef.current,
-      // Mapbox Standard — most modern style available (GL JS v3)
-      style: 'mapbox://styles/mapbox/standard',
-      center: POPAYAN_CENTER,
-      zoom: INITIAL_ZOOM,
-      pitch: INITIAL_PITCH,
-      bearing: INITIAL_BEARING,
-      antialias: true,
-    })
+    mapboxgl.accessToken = token
 
-    mapRef.current = map
+    let map
+    try {
+      map = new mapboxgl.Map({
+        container: containerRef.current,
+        style: 'mapbox://styles/mapbox/standard',
+        center: POPAYAN_CENTER,
+        zoom: INITIAL_ZOOM,
+        pitch: INITIAL_PITCH,
+        bearing: INITIAL_BEARING,
+        antialias: true,
+      })
 
-    map.addControl(new mapboxgl.NavigationControl(), 'top-right')
-
-    map.on('load', () => {
-      // Standard style exposes 3D buildings via config, not manual layers
-      map.setConfigProperty('basemap', 'show3dObjects', true)
-    })
+      mapRef.current = map
+      map.addControl(new mapboxgl.NavigationControl(), 'top-right')
+      map.on('load', () => {
+        map.setConfigProperty('basemap', 'show3dObjects', true)
+      })
+      map.on('error', (e) => setError(e.error?.message ?? 'Error al cargar el mapa'))
+    } catch (e) {
+      setError(e.message)
+    }
 
     return () => {
-      map.remove()
+      map?.remove()
       mapRef.current = null
     }
   }, [])
+
+  if (error) {
+    return (
+      <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#1a1a2e', color: '#fff', fontSize: 16, textAlign: 'center', padding: 24 }}>
+        <p>{error}</p>
+      </div>
+    )
+  }
 
   return <div ref={containerRef} style={{ width: '100%', height: '100%' }} />
 }
