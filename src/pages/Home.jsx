@@ -16,11 +16,40 @@ const PREFERENCIAS = [
 
 const CATEGORIAS = ['Todo', 'Gastronomía', 'Arte', 'Música', 'Cultura', 'Turismo']
 
+const PUNTOS_INTERES = [
+  { id: 1,  nombre: 'Parque Caldas',             categoria: 'Turismo',      coords: [-76.6062, 2.4418], icon: '🏛', descripcion: 'Plaza principal de la ciudad blanca' },
+  { id: 2,  nombre: 'Catedral Basílica',          categoria: 'Cultura',     coords: [-76.606469, 2.441424], icon: '⛪', descripcion: 'Catedral Nuestra Señora de la Asunción' },
+  { id: 3,  nombre: 'Puente del Humilladero',     categoria: 'Turismo',     coords: [-76.605112, 2.444202], icon: '🌉', descripcion: 'Histórico puente colonial del siglo XIX' },
+  { id: 4,  nombre: 'Iglesia de San Francisco',   categoria: 'Cultura',     coords: [-76.608425, 2.443390], icon: '⛪', descripcion: 'Templo colonial del siglo XVIII' },
+  { id: 5,  nombre: 'Morro de Tulcán',            categoria: 'Turismo',     coords: [ -76.600220,2.444609], icon: '🗿', descripcion: 'Colina con estatua de Sebastián de Belalcázar' },
+  { id: 6,  nombre: 'Teatro Guillermo Valencia',  categoria: 'Arte',        coords: [-76.6060, 2.4432], icon: '🎭', descripcion: 'Teatro municipal del centro histórico' },
+  { id: 7,  nombre: 'Capilla de Belén',           categoria: 'Cultura',     coords: [-76.599735, 2.439517], icon: '⛪', descripcion: 'Capilla colonial del siglo XVII' },
+  { id: 8,  nombre: 'Museo Guillermo Valencia',   categoria: 'Arte',        coords: [-76.605300, 2.443254], icon: '🎨', descripcion: 'Casa natal del poeta laureado' },
+  { id: 9,  nombre: 'Casa Mosquera',              categoria: 'Cultura',     coords: [-76.604611, 2.442800], icon: '🏠', descripcion: 'Museo histórico del General Mosquera' },
+  { id: 10, nombre: 'Casa Valencia',              categoria: 'Arte',        coords: [-76.609368, 2.442401], icon: '📚', descripcion: 'Museo de arte y literatura' },
+  { id: 11, nombre: 'La Iguana',                  categoria: 'Gastronomía', coords: [-76.608862, 2.443214], icon: '🍽', descripcion: 'Gastronomía típica caucana' },
+  { id: 12, nombre: 'El Sotareño',                categoria: 'Gastronomía', coords: [-76.606063, 2.443950], icon: '🍲', descripcion: 'Cocina tradicional colombiana' },
+]
+
 export default function Home() {
   const [categoriaActiva, setCategoriaActiva] = useState('Todo')
+  const [puntoActivo, setPuntoActivo] = useState(null)
   const [form, setForm] = useState({ origen: '', edad: '', preferencias: [] })
   const [enviado, setEnviado] = useState(false)
   const [modalAbierto, setModalAbierto] = useState(false)
+
+  const puntosFiltrados = categoriaActiva === 'Todo'
+    ? PUNTOS_INTERES
+    : PUNTOS_INTERES.filter(p => p.categoria === categoriaActiva)
+
+  const handleCategoriaChange = (cat) => {
+    setCategoriaActiva(cat)
+    setPuntoActivo(null)
+  }
+
+  const handleSelectPunto = (punto) => {
+    setPuntoActivo(prev => prev?.id === punto.id ? null : punto)
+  }
 
   const togglePref = (label) =>
     setForm(prev => ({
@@ -61,15 +90,40 @@ export default function Home() {
               <button
                 key={cat}
                 className={`filtro-chip${categoriaActiva === cat ? ' activo' : ''}`}
-                onClick={() => setCategoriaActiva(cat)}
+                onClick={() => handleCategoriaChange(cat)}
               >
                 {cat}
               </button>
             ))}
           </div>
         </div>
+
         <div className="mapa-wrap">
-          <MapView />
+          <div className="mapa-map">
+            <MapView puntos={puntosFiltrados} activePunto={puntoActivo} />
+          </div>
+
+          <div className="mapa-lista-panel">
+            <div className="lista-header">
+              <span className="lista-titulo">Puntos de interés</span>
+              <span className="lista-count">{puntosFiltrados.length}</span>
+            </div>
+            <div className="lista-items">
+              {puntosFiltrados.map(punto => (
+                <button
+                  key={punto.id}
+                  className={`poi-card${puntoActivo?.id === punto.id ? ' activo' : ''}`}
+                  onClick={() => handleSelectPunto(punto)}
+                >
+                  <span className="poi-icon">{punto.icon}</span>
+                  <div className="poi-info">
+                    <span className="poi-nombre">{punto.nombre}</span>
+                    <span className="poi-cat-tag">{punto.categoria}</span>
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
 
