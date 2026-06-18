@@ -241,7 +241,115 @@ button, input, select { font-family: inherit; }
 .filtro-chip:hover { border-color: var(--terra-lt); color: var(--terra); }
 .filtro-chip.activo { background: var(--terra); border-color: var(--terra); color: var(--white); }
 
-.mapa-wrap { width: 100%; height: 70vh; min-height: 420px; }
+.mapa-wrap {
+  display: flex;
+  width: 100%;
+  height: 70vh;
+  min-height: 420px;
+  overflow: hidden;
+}
+
+.mapa-map {
+  flex: 1 1 0;
+  height: 100%;
+  min-width: 0;
+}
+
+.mapa-lista-panel {
+  flex: 0 0 280px;
+  height: 100%;
+  background: var(--white);
+  border-left: 1px solid var(--cream-dk);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.lista-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--cream-dk);
+  flex-shrink: 0;
+  background: var(--cream);
+}
+
+.lista-titulo {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--stone);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.lista-count {
+  background: var(--terra);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 20px;
+  min-width: 22px;
+  text-align: center;
+}
+
+.lista-items {
+  flex: 1;
+  overflow-y: auto;
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.lista-items::-webkit-scrollbar { width: 4px; }
+.lista-items::-webkit-scrollbar-track { background: transparent; }
+.lista-items::-webkit-scrollbar-thumb { background: var(--cream-dk); border-radius: 4px; }
+
+.poi-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 10px;
+  border-radius: 8px;
+  background: transparent;
+  border: 1.5px solid transparent;
+  cursor: pointer;
+  transition: all .15s ease;
+  text-align: left;
+  width: 100%;
+}
+.poi-card:hover { background: var(--cream); border-color: var(--cream-dk); }
+.poi-card.activo { background: var(--cream); border-color: var(--terra-lt); }
+
+.poi-icon {
+  font-size: 17px;
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--cream);
+  border-radius: 8px;
+  flex-shrink: 0;
+  border: 1px solid var(--cream-dk);
+}
+.poi-card.activo .poi-icon { background: #fef0e8; border-color: var(--terra-lt); }
+
+.poi-info { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+
+.poi-nombre {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--stone);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+}
+
+.poi-cat-tag { font-size: 11px; color: var(--stone-lt); font-weight: 500; }
 
 /* ─────────────────────────────────────────
    6. HOME — CTA SECTION
@@ -1315,6 +1423,9 @@ button, input, select { font-family: inherit; }
 @media (max-width: 768px) {
   .hero-overlay { padding: 40px 28px; }
   .mapa-header  { padding: 28px 24px 16px; flex-direction: column; align-items: flex-start; }
+  .mapa-wrap    { flex-direction: column; height: auto; }
+  .mapa-map     { height: 50vh; min-height: 280px; }
+  .mapa-lista-panel { flex: none; height: 240px; border-left: none; border-top: 1px solid var(--cream-dk); }
   .cta-section  { flex-direction: column; padding: 48px 24px; }
   .cta-encuesta, .cta-registro { padding: 32px 0; }
   .cta-divider  { width: 100%; height: 1px; }
@@ -1339,6 +1450,13 @@ button, input, select { font-family: inherit; }
 
 .map-marker:hover {
   transform: scale(1.2);
+}
+
+.map-marker--active {
+  background: var(--stone);
+  transform: scale(1.3);
+  z-index: 10;
+  box-shadow: 0 0 0 4px rgba(61,46,34,.25), 0 4px 14px rgba(0,0,0,.4);
 }
 
 /* ── Mapbox popup ── */

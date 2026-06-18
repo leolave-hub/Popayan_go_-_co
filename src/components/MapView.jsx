@@ -10,7 +10,7 @@ const INITIAL_BEARING = -17
 export default function MapView({ puntos = [], activePunto = null }) {
   const containerRef = useRef(null)
   const mapRef = useRef(null)
-  const markersRef = useRef([])
+  const markersRef = useRef([]) // [{ id, marker, el }]
   const [error, setError] = useState(null)
   const [mapReady, setMapReady] = useState(false)
 
@@ -56,7 +56,7 @@ export default function MapView({ puntos = [], activePunto = null }) {
   useEffect(() => {
     if (!mapReady || !mapRef.current) return
 
-    markersRef.current.forEach(m => m.remove())
+    markersRef.current.forEach(({ marker }) => marker.remove())
     markersRef.current = []
 
     puntos.forEach(punto => {
@@ -72,12 +72,23 @@ export default function MapView({ puntos = [], activePunto = null }) {
         .setPopup(popup)
         .addTo(mapRef.current)
 
-      markersRef.current.push(marker)
+      markersRef.current.push({ id: punto.id, marker, el })
     })
   }, [puntos, mapReady])
 
   useEffect(() => {
-    if (!mapReady || !activePunto || !mapRef.current) return
+    if (!mapReady || !mapRef.current) return
+
+    markersRef.current.forEach(({ id, marker, el }) => {
+      const isActive = activePunto?.id === id
+      el.classList.toggle('map-marker--active', isActive)
+      const popup = marker.getPopup()
+      if (isActive && !popup.isOpen()) marker.togglePopup()
+      if (!isActive && popup.isOpen()) marker.togglePopup()
+    })
+
+    if (!activePunto) return
+
     mapRef.current.flyTo({
       center: activePunto.coords,
       zoom: 17,
