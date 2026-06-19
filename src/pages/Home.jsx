@@ -1,8 +1,11 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useState, useRef } from 'react'
+import { useNavigate, Link } from 'react-router-dom'
 import MapView from '../components/MapView'
 import heroImg from '../assets/hero.jpg'
 import { PUNTOS_INTERES } from '../data/lugares'
+import { EVENTOS, CATEGORIAS_INFO } from '../data/eventos'
+import { RUTAS_CURADAS } from '../data/rutas'
+import './Home.css'
 
 const PREFERENCIAS = [
   { label: 'Gastronomía', emoji: '🍽' },
@@ -16,14 +19,34 @@ const PREFERENCIAS = [
 
 const CATEGORIAS = ['Todo', 'Gastronomía', 'Arte', 'Cultura', 'Turismo', 'Vida Nocturna', 'Comercial', 'Recreativo']
 
-// ── Algoritmo vecino más cercano para ordenar paradas ──
+const toISO = (d) => {
+  const y = d.getFullYear()
+  const m = String(d.getMonth() + 1).padStart(2, '0')
+  const day = String(d.getDate()).padStart(2, '0')
+  return `${y}-${m}-${day}`
+}
+
+function getEventosFinDeSemana() {
+  const hoy = new Date()
+  const diaSemana = hoy.getDay()
+  const diasHastaSab = diaSemana === 6 ? 0 : diaSemana === 0 ? 6 : 6 - diaSemana
+  const sab = new Date(hoy); sab.setDate(hoy.getDate() + diasHastaSab)
+  const dom = new Date(sab); dom.setDate(sab.getDate() + 1)
+  const sabStr = toISO(sab)
+  const domStr = toISO(dom)
+  return EVENTOS.filter(ev => {
+    const inicio = ev.fechaInicio
+    const fin = ev.fechaFin
+    return (sabStr >= inicio && sabStr <= fin) || (domStr >= inicio && domStr <= fin)
+  }).slice(0, 4)
+}
+
 function ordenarPorCercania(inicio, lugares) {
   const pendientes = [...lugares]
   const ordenados = []
   let actual = inicio
   while (pendientes.length > 0) {
-    let minIdx = 0
-    let minDist = Infinity
+    let minIdx = 0, minDist = Infinity
     pendientes.forEach((p, i) => {
       const d = (p.coords[0] - actual[0]) ** 2 + (p.coords[1] - actual[1]) ** 2
       if (d < minDist) { minDist = d; minIdx = i }
@@ -35,7 +58,6 @@ function ordenarPorCercania(inicio, lugares) {
   return ordenados
 }
 
-// ── Obtiene la ruta caminando desde Mapbox Directions API ──
 async function fetchRutaMapbox(coordenadas) {
   const token = import.meta.env.VITE_MAPBOX_TOKEN
   const coords = coordenadas.map(([lng, lat]) => `${lng},${lat}`).join(';')
@@ -47,17 +69,22 @@ async function fetchRutaMapbox(coordenadas) {
   return data.routes[0].geometry
 }
 
+const formatFecha = (str) =>
+  new Date(str + 'T12:00:00').toLocaleDateString('es-CO', {
+    weekday: 'short', day: 'numeric', month: 'short',
+  })
+
 export default function Home() {
   const navigate = useNavigate()
+  const mapaSectionRef = useRef(null)
   const [categoriaActiva, setCategoriaActiva] = useState('Todo')
   const [puntoActivo, setPuntoActivo] = useState(null)
   const [form, setForm] = useState({ origen: '', edad: '', preferencias: [] })
   const [enviado, setEnviado] = useState(false)
   const [modalAbierto, setModalAbierto] = useState(false)
 
-  // ── Estado de ruta turística ──
   const [modoRuta, setModoRuta] = useState(false)
-  const [geoStatus, setGeoStatus] = useState('idle') // 'idle' | 'pidiendo' | 'ok' | 'error'
+  const [geoStatus, setGeoStatus] = useState('idle')
   const [userLocation, setUserLocation] = useState(null)
   const [lugaresRuta, setLugaresRuta] = useState(new Set())
   const [rutaGeojson, setRutaGeojson] = useState(null)
@@ -65,19 +92,19 @@ export default function Home() {
   const [calculando, setCalculando] = useState(false)
   const [rutaError, setRutaError] = useState(null)
 
+  const eventosFinDeSemana = getEventosFinDeSemana()
   const puntosFiltrados = categoriaActiva === 'Todo'
     ? PUNTOS_INTERES
     : PUNTOS_INTERES.filter(p => p.categoria === categoriaActiva)
 
-  const handleCategoriaChange = (cat) => {
-    setCategoriaActiva(cat)
-    setPuntoActivo(null)
+  const scrollAlMapa = () => {
+    mapaSectionRef.current?.scrollIntoView({ behavior: 'smooth' })
   }
 
+  const handleCategoriaChange = (cat) => { setCategoriaActiva(cat); setPuntoActivo(null) }
   const handleSelectPunto = (punto) => {
     setPuntoActivo(prev => prev?.id === punto.id ? null : punto)
   }
-
   const togglePref = (label) =>
     setForm(prev => ({
       ...prev,
@@ -95,46 +122,32 @@ export default function Home() {
   }
 
   const cerrarModal = () => {
-    setModalAbierto(false)
-    setEnviado(false)
+    setModalAbierto(false); setEnviado(false)
     setForm({ origen: '', edad: '', preferencias: [] })
   }
 
-  // ── Funciones de ruta turística ──
   const pedirUbicacion = () => {
-    if (!navigator.geolocation) {
-      setGeoStatus('error')
-      return
-    }
+    if (!navigator.geolocation) { setGeoStatus('error'); return }
     setGeoStatus('pidiendo')
     navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        setUserLocation([pos.coords.longitude, pos.coords.latitude])
-        setGeoStatus('ok')
-      },
+      (pos) => { setUserLocation([pos.coords.longitude, pos.coords.latitude]); setGeoStatus('ok') },
       () => setGeoStatus('error'),
       { timeout: 12000 }
     )
   }
 
-  const activarModoRuta = () => {
-    setModoRuta(true)
-    pedirUbicacion()
-  }
-
+  const activarModoRuta = () => { setModoRuta(true); pedirUbicacion() }
   const toggleLugarRuta = (id) => {
     setLugaresRuta(prev => {
       const next = new Set(prev)
-      if (next.has(id)) next.delete(id)
-      else next.add(id)
+      if (next.has(id)) next.delete(id); else next.add(id)
       return next
     })
   }
 
   const calcularRuta = async () => {
     if (!userLocation || lugaresRuta.size === 0) return
-    setCalculando(true)
-    setRutaError(null)
+    setCalculando(true); setRutaError(null)
     try {
       const seleccionados = PUNTOS_INTERES.filter(p => lugaresRuta.has(p.id))
       const ordenados = ordenarPorCercania(userLocation, seleccionados)
@@ -142,43 +155,124 @@ export default function Home() {
       const coordenadas = [userLocation, ...ordenados.map(p => p.coords)]
       const geometry = await fetchRutaMapbox(coordenadas)
       setRutaGeojson(geometry)
-    } catch {
-      setRutaError('No se pudo calcular la ruta. Intenta de nuevo.')
-    } finally {
-      setCalculando(false)
-    }
+    } catch { setRutaError('No se pudo calcular la ruta. Intenta de nuevo.') }
+    finally { setCalculando(false) }
   }
 
-  const nuevaSeleccion = () => {
-    setRutaOrdenada([])
-    setRutaGeojson(null)
-    setLugaresRuta(new Set())
-    setRutaError(null)
-  }
-
+  const nuevaSeleccion = () => { setRutaOrdenada([]); setRutaGeojson(null); setLugaresRuta(new Set()); setRutaError(null) }
   const limpiarRuta = () => {
-    setModoRuta(false)
-    setGeoStatus('idle')
-    setUserLocation(null)
-    setLugaresRuta(new Set())
-    setRutaGeojson(null)
-    setRutaOrdenada([])
-    setRutaError(null)
+    setModoRuta(false); setGeoStatus('idle'); setUserLocation(null)
+    setLugaresRuta(new Set()); setRutaGeojson(null); setRutaOrdenada([]); setRutaError(null)
   }
 
   return (
     <main>
-      {/* ── Hero ── */}
-      <section className="hero" style={{ backgroundImage: `url(${heroImg})` }}>
+      {/* ── Hero editorial ── */}
+      <section className="hero">
+        <img src={heroImg} className="hero-bg-img" alt="Popayán, la Ciudad Blanca" />
         <div className="hero-overlay">
-          <span className="hero-tag">Popayán · Colombia</span>
-          <h1>La Ciudad Blanca</h1>
-          <p>Historia, cultura y tradición</p>
+          <div className="hero-content">
+            <div className="hero-pills">
+              <span className="hero-pill">Patrimonio colonial UNESCO</span>
+              <span className="hero-pill">Gastronomía andina</span>
+              <span className="hero-pill">Semana Santa declarada Patrimonio</span>
+            </div>
+            <h1 className="hero-h1">
+              La ciudad donde<br />el tiempo se detiene
+            </h1>
+            <p className="hero-sub">
+              Descubre Popayán, la Ciudad Blanca del sur de Colombia.
+              Historia, cultura y sabores que te esperan.
+            </p>
+            <div className="hero-actions">
+              <button className="hero-btn hero-btn--primary" onClick={scrollAlMapa}>
+                Explorar el mapa
+              </button>
+              <Link to="/eventos" className="hero-btn hero-btn--ghost">
+                Ver eventos
+              </Link>
+            </div>
+          </div>
+          <button className="hero-scroll-arrow" onClick={scrollAlMapa} aria-label="Ir al mapa">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+          </button>
+        </div>
+      </section>
+
+      {/* ── Este fin de semana ── */}
+      {eventosFinDeSemana.length > 0 && (
+        <section className="weekend-section">
+          <div className="weekend-inner">
+            <div className="weekend-header">
+              <div>
+                <p className="section-eyebrow">Agenda cultural</p>
+                <h2 className="section-title">Este fin de semana</h2>
+              </div>
+              <Link to="/eventos" className="weekend-ver-todos">
+                Ver todos los eventos →
+              </Link>
+            </div>
+            <div className="weekend-grid">
+              {eventosFinDeSemana.map(ev => {
+                const info = CATEGORIAS_INFO[ev.categoria]
+                return (
+                  <Link key={ev.id} to="/eventos" className="weekend-card">
+                    <div className="weekend-card-accent" style={{ background: info?.color }} />
+                    <div className="weekend-card-body">
+                      <span className="weekend-card-cat" style={{ color: info?.color }}>{ev.categoria}</span>
+                      <h3 className="weekend-card-titulo">{ev.titulo}</h3>
+                      <div className="weekend-card-meta">
+                        <span>📅 {formatFecha(ev.fechaInicio)}</span>
+                        <span>📍 {ev.lugar}</span>
+                      </div>
+                    </div>
+                  </Link>
+                )
+              })}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ── Rutas curadas ── */}
+      <section className="rutas-section">
+        <div className="rutas-inner">
+          <div className="rutas-header">
+            <p className="section-eyebrow">Recorridos temáticos</p>
+            <h2 className="section-title">Rutas para explorar Popayán</h2>
+            <p className="section-desc">
+              Itinerarios curados para descubrir lo mejor de la Ciudad Blanca a tu ritmo
+            </p>
+          </div>
+          <div className="rutas-grid">
+            {RUTAS_CURADAS.map(ruta => (
+              <button
+                key={ruta.id}
+                className="ruta-card"
+                onClick={activarModoRuta}
+              >
+                <div className="ruta-card-img-wrap">
+                  <img src={ruta.foto} alt={ruta.titulo} className="ruta-card-img" />
+                  <div className="ruta-card-overlay" style={{ background: `${ruta.color}CC` }} />
+                  <span className="ruta-card-icon">{ruta.icon}</span>
+                </div>
+                <div className="ruta-card-body">
+                  <h3 className="ruta-card-titulo">{ruta.titulo}</h3>
+                  <p className="ruta-card-desc">{ruta.descripcion}</p>
+                  <div className="ruta-card-meta">
+                    <span>⏱ {ruta.duracion}</span>
+                    <span>📍 {ruta.paradas} paradas</span>
+                    <span>🚶 {ruta.distancia}</span>
+                  </div>
+                </div>
+              </button>
+            ))}
+          </div>
         </div>
       </section>
 
       {/* ── Mapa ── */}
-      <section className="mapa-section">
+      <section className="mapa-section" ref={mapaSectionRef}>
         <div className="mapa-header">
           <h2>Mapa interactivo</h2>
           <div className="mapa-header-right">
@@ -218,11 +312,9 @@ export default function Home() {
             />
           </div>
 
-          {/* ── Panel derecho: lista normal o planificador de ruta ── */}
           <div className="mapa-lista-panel">
             {modoRuta ? (
               <>
-                {/* Encabezado del planificador */}
                 <div className="lista-header">
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
                     <span className="lista-titulo">
@@ -246,7 +338,6 @@ export default function Home() {
                   }
                 </div>
 
-                {/* Contenido: selección o resultado */}
                 {rutaOrdenada.length > 0 ? (
                   <div className="ruta-pasos-list">
                     <div className="ruta-paso ruta-paso--inicio">
@@ -271,9 +362,7 @@ export default function Home() {
                     {geoStatus === 'error' && (
                       <div className="ruta-geo-status">
                         <span>No se pudo obtener tu ubicación</span>
-                        <button className="btn-reintentar-geo" onClick={pedirUbicacion}>
-                          Reintentar
-                        </button>
+                        <button className="btn-reintentar-geo" onClick={pedirUbicacion}>Reintentar</button>
                       </div>
                     )}
                     <p className="ruta-hint">Selecciona los lugares que quieres visitar:</p>
@@ -284,12 +373,8 @@ export default function Home() {
                           className={`ruta-check-item${lugaresRuta.has(punto.id) ? ' sel' : ''}`}
                           onClick={() => toggleLugarRuta(punto.id)}
                         >
-                          <div className="ruta-check-box">
-                            {lugaresRuta.has(punto.id) && '✓'}
-                          </div>
-                          <span className="poi-icon" style={{ fontSize: 13, width: 26, height: 26 }}>
-                            {punto.icon}
-                          </span>
+                          <div className="ruta-check-box">{lugaresRuta.has(punto.id) && '✓'}</div>
+                          <span className="poi-icon" style={{ fontSize: 13, width: 26, height: 26 }}>{punto.icon}</span>
                           <div className="ruta-paso-info">
                             <span className="ruta-paso-nombre">{punto.nombre}</span>
                             <span className="ruta-paso-cat">{punto.categoria}</span>
@@ -300,31 +385,22 @@ export default function Home() {
                   </div>
                 )}
 
-                {/* Footer con acciones */}
                 <div className="ruta-footer">
                   {rutaError && (
-                    <p style={{ fontSize: 11.5, color: '#c62828', margin: 0, textAlign: 'center' }}>
-                      {rutaError}
-                    </p>
+                    <p style={{ fontSize: 11.5, color: '#c62828', margin: 0, textAlign: 'center' }}>{rutaError}</p>
                   )}
                   {rutaOrdenada.length > 0 ? (
-                    <button className="btn-limpiar-ruta" onClick={nuevaSeleccion}>
-                      Cambiar selección
-                    </button>
+                    <button className="btn-limpiar-ruta" onClick={nuevaSeleccion}>Cambiar selección</button>
                   ) : (
                     <button
                       className="btn-calcular-ruta"
                       onClick={calcularRuta}
                       disabled={calculando || lugaresRuta.size === 0 || geoStatus !== 'ok'}
                     >
-                      {calculando
-                        ? 'Calculando...'
-                        : lugaresRuta.size === 0
-                          ? 'Selecciona al menos un lugar'
-                          : geoStatus !== 'ok'
-                            ? 'Esperando ubicación...'
-                            : `Trazar ruta · ${lugaresRuta.size} parada${lugaresRuta.size !== 1 ? 's' : ''}`
-                      }
+                      {calculando ? 'Calculando...'
+                        : lugaresRuta.size === 0 ? 'Selecciona al menos un lugar'
+                        : geoStatus !== 'ok' ? 'Esperando ubicación...'
+                        : `Trazar ruta · ${lugaresRuta.size} parada${lugaresRuta.size !== 1 ? 's' : ''}`}
                     </button>
                   )}
                 </div>
@@ -337,27 +413,15 @@ export default function Home() {
                 </div>
                 <div className="lista-items">
                   {puntosFiltrados.map(punto => (
-                    <div
-                      key={punto.id}
-                      className={`poi-card${puntoActivo?.id === punto.id ? ' activo' : ''}`}
-                    >
-                      <button
-                        className="poi-card-select"
-                        onClick={() => handleSelectPunto(punto)}
-                      >
+                    <div key={punto.id} className={`poi-card${puntoActivo?.id === punto.id ? ' activo' : ''}`}>
+                      <button className="poi-card-select" onClick={() => handleSelectPunto(punto)}>
                         <span className="poi-icon">{punto.icon}</span>
                         <div className="poi-info">
                           <span className="poi-nombre">{punto.nombre}</span>
                           <span className="poi-cat-tag">{punto.categoria}</span>
                         </div>
                       </button>
-                      <button
-                        className="poi-ver-btn"
-                        onClick={() => navigate(`/lugar/${punto.id}`)}
-                        title="Ver página del lugar"
-                      >
-                        →
-                      </button>
+                      <button className="poi-ver-btn" onClick={() => navigate(`/lugar/${punto.id}`)} title="Ver página del lugar">→</button>
                     </div>
                   ))}
                 </div>
@@ -367,30 +431,62 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── CTA ── */}
+      {/* ── Lugares destacados ── */}
+      <section className="destacados-section">
+        <div className="destacados-inner">
+          <p className="section-eyebrow">Lo imperdible</p>
+          <h2 className="section-title">Lugares que no te puedes perder</h2>
+          <div className="destacados-grid">
+            {PUNTOS_INTERES.slice(0, 6).map(lugar => (
+              <Link key={lugar.id} to={`/lugar/${lugar.id}`} className="dest-card">
+                <div className="dest-card-img-wrap">
+                  {lugar.foto
+                    ? <img src={lugar.foto} alt={lugar.nombre} className="dest-card-img" />
+                    : <div className="dest-card-img dest-card-img--grad" style={{ background: lugar.colorGradient }}>
+                        <span className="dest-card-emoji">{lugar.icon}</span>
+                      </div>
+                  }
+                  <span className="dest-card-cat">{lugar.categoria}</span>
+                </div>
+                <div className="dest-card-body">
+                  <h3 className="dest-card-nombre">{lugar.nombre}</h3>
+                  <p className="dest-card-tagline">{lugar.tagline}</p>
+                </div>
+              </Link>
+            ))}
+          </div>
+          <div className="destacados-cta">
+            <button className="btn-ver-todos-map" onClick={scrollAlMapa}>
+              Ver todos los lugares en el mapa
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* ── CTA mejorado ── */}
       <section className="cta-section">
         <div className="cta-encuesta">
-          <p className="cta-label">Experiencia personalizada</p>
-          <h2>¿Cómo es tu visita a Popayán?</h2>
+          <p className="cta-label">Personaliza tu visita</p>
+          <h2>¿Primera vez en Popayán?</h2>
           <p className="cta-desc">
-            Comparte tus intereses y ayúdanos a ofrecerte una mejor experiencia en la ciudad.
+            Cuéntanos tus intereses y te ayudamos a descubrir los lugares perfectos para ti.
           </p>
           <button className="btn-abrir-encuesta" onClick={() => setModalAbierto(true)}>
-            Ayúdanos a mejorar · Cuéntanos sobre ti
+            Crear mi experiencia →
           </button>
         </div>
 
         <div className="cta-divider" />
 
         <div className="cta-registro">
-          <p className="cta-label">¿Quieres guardar tu experiencia?</p>
-          <h3>Crea tu cuenta</h3>
+          <p className="cta-label">Guarda tus favoritos</p>
+          <h3>Crea tu cuenta de viajero</h3>
           <p className="cta-desc">
-            Guarda tus lugares favoritos y recibe recomendaciones personalizadas.
+            Guarda lugares, planifica tu itinerario y recibe recomendaciones personalizadas.
           </p>
-          <button className="btn-registro">
-            Registro
-          </button>
+          <Link to="/registro" className="btn-registro">
+            Registrarme gratis
+          </Link>
         </div>
       </section>
 
@@ -403,10 +499,8 @@ export default function Home() {
             {enviado ? (
               <div className="form-success">
                 <div className="success-icon">✓</div>
-                <p>¡Gracias! Disfruta de tu experiencia.</p>
-                <button className="btn-enviar" style={{ marginTop: 16 }} onClick={cerrarModal}>
-                  Cerrar
-                </button>
+                <p>¡Gracias! Disfruta de tu experiencia en Popayán.</p>
+                <button className="btn-enviar" style={{ marginTop: 16 }} onClick={cerrarModal}>Cerrar</button>
               </div>
             ) : (
               <>
@@ -414,39 +508,31 @@ export default function Home() {
                   <h2>Cuéntanos sobre ti</h2>
                   <p>Tus respuestas nos ayudan a mejorar Popayán Go</p>
                 </div>
-
                 <form className="postulate-form" onSubmit={handleSubmit}>
                   <div className="form-group">
                     <label>¿De dónde eres?</label>
                     <input
-                      type="text"
-                      placeholder="País de origen"
+                      type="text" placeholder="País de origen"
                       value={form.origen}
                       onChange={e => setForm(p => ({ ...p, origen: e.target.value }))}
                       required
                     />
                   </div>
-
                   <div className="form-group">
                     <label>¿Qué edad tienes?</label>
                     <input
-                      type="number"
-                      placeholder="Edad"
-                      min="1"
-                      max="120"
+                      type="number" placeholder="Edad" min="1" max="120"
                       value={form.edad}
                       onChange={e => setForm(p => ({ ...p, edad: e.target.value }))}
                       required
                     />
                   </div>
-
                   <div className="form-group">
                     <label>¿Qué te interesa?</label>
                     <div className="prefs-grid">
                       {PREFERENCIAS.map(({ label, emoji }) => (
                         <button
-                          type="button"
-                          key={label}
+                          type="button" key={label}
                           className={`pref-chip${form.preferencias.includes(label) ? ' sel' : ''}`}
                           onClick={() => togglePref(label)}
                         >
@@ -456,10 +542,7 @@ export default function Home() {
                       ))}
                     </div>
                   </div>
-
-                  <button type="submit" className="btn-enviar">
-                    Continuar →
-                  </button>
+                  <button type="submit" className="btn-enviar">Continuar →</button>
                 </form>
               </>
             )}
