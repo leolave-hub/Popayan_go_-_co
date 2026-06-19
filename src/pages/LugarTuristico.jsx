@@ -197,6 +197,20 @@ export default function LugarTuristico() {
         )}
       </div>
 
+      {/* ── Reproductor de audio ── */}
+      {lugar.audio && (
+        <div className="lt-audio-player">
+          <div className="lt-audio-icon-wrap">
+            <span className="lt-audio-icon">🎧</span>
+          </div>
+          <div className="lt-audio-body">
+            <span className="lt-audio-label">Narración del lugar</span>
+            <p className="lt-audio-sub">Escucha la historia de {lugar.nombre}</p>
+            <audio controls src={lugar.audio} className="lt-audio-el" preload="none" />
+          </div>
+        </div>
+      )}
+
       {/* ── Layout principal ── */}
       <div className="lt-container">
         <div className="lt-main">

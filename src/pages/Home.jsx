@@ -208,7 +208,11 @@ export default function Home() {
             <MapView
               puntos={puntosFiltrados}
               activePunto={modoRuta ? null : puntoActivo}
-              onPuntoClick={modoRuta ? null : (punto) => navigate(`/lugar/${punto.id}`)}
+              onPuntoClick={modoRuta ? null : (punto) => {
+                if (punto === null) setPuntoActivo(null)
+                else setPuntoActivo(prev => prev?.id === punto.id ? null : punto)
+              }}
+              onVerMas={(punto) => navigate(`/lugar/${punto.id}`)}
               ruta={rutaGeojson}
               userLocation={userLocation}
             />

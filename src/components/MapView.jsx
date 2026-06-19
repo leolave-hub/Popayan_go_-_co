@@ -11,6 +11,7 @@ export default function MapView({
   puntos = [],
   activePunto = null,
   onPuntoClick = null,
+  onVerMas = null,
   ruta = null,
   userLocation = null,
 }) {
@@ -20,6 +21,12 @@ export default function MapView({
   const userMarkerRef = useRef(null)
   const [error, setError] = useState(null)
   const [mapReady, setMapReady] = useState(false)
+
+  const onPuntoClickRef = useRef(onPuntoClick)
+  const onVerMasRef = useRef(onVerMas)
+  const closingProgrammaticallyRef = useRef(false)
+  useEffect(() => { onPuntoClickRef.current = onPuntoClick }, [onPuntoClick])
+  useEffect(() => { onVerMasRef.current = onVerMas }, [onVerMas])
 
   useEffect(() => {
     const token = import.meta.env.VITE_MAPBOX_TOKEN
@@ -66,36 +73,67 @@ export default function MapView({
   useEffect(() => {
     if (!mapReady || !mapRef.current) return
 
-    markersRef.current.forEach(({ marker }) => marker.remove())
+    markersRef.current.forEach(({ marker, popup }) => { popup.remove(); marker.remove() })
     markersRef.current = []
 
     puntos.forEach(punto => {
       const el = document.createElement('div')
       el.className = 'map-marker'
-      el.innerHTML = `<span>${punto.icon}</span>`
+      el.innerHTML = `
+        <div class="map-marker-pin">${punto.icon}</div>
+        <span class="map-marker-label">${punto.nombre}</span>
+      `
 
-      const popup = new mapboxgl.Popup({ offset: 30, closeButton: false, maxWidth: '220px' })
+      const popup = new mapboxgl.Popup({
+        offset: [0, -10],
+        closeButton: true,
+        maxWidth: '300px',
+        className: 'mpopup-wrap',
+        anchor: 'bottom',
+      })
         .setHTML(
-          `<div class="mapbox-popup-inner">` +
-          `<strong>${punto.nombre}</strong>` +
-          `<p>${punto.descripcion}</p>` +
-          `<a href="/lugar/${punto.id}" class="mapbox-popup-btn">Ver lugar →</a>` +
-          `</div>`
+          `<div class="mpopup">
+            <div class="mpopup-header">
+              <span class="mpopup-icon">${punto.icon}</span>
+              <div class="mpopup-title-wrap">
+                <strong class="mpopup-title">${punto.nombre}</strong>
+                <span class="mpopup-cat">${punto.categoria}</span>
+              </div>
+            </div>
+            <p class="mpopup-desc">${punto.descripcionCorta}</p>
+            ${punto.audio
+              ? `<div class="mpopup-audio-wrap">
+                  <span class="mpopup-audio-lbl">🎧 Narración</span>
+                  <audio controls src="${punto.audio}" class="mpopup-audio" preload="none"></audio>
+                 </div>`
+              : ''}
+            <button class="mpopup-ver-btn">Ver más información →</button>
+          </div>`
         )
+        .setLngLat(punto.coords)
+
+      popup.on('open', () => {
+        const btn = popup.getElement()?.querySelector('.mpopup-ver-btn')
+        if (btn) btn.onclick = () => onVerMasRef.current?.(punto)
+      })
+
+      popup.on('close', () => {
+        popup.getElement()?.querySelector('audio')?.pause()
+        if (!closingProgrammaticallyRef.current) {
+          onPuntoClickRef.current?.(null)
+        }
+      })
 
       const marker = new mapboxgl.Marker(el)
         .setLngLat(punto.coords)
-        .setPopup(popup)
         .addTo(mapRef.current)
 
-      if (onPuntoClick) {
-        el.addEventListener('click', (e) => {
-          e.stopPropagation()
-          onPuntoClick(punto)
-        })
-      }
+      el.addEventListener('click', (e) => {
+        e.stopPropagation()
+        onPuntoClickRef.current?.(punto)
+      })
 
-      markersRef.current.push({ id: punto.id, marker, el })
+      markersRef.current.push({ id: punto.id, marker, el, popup })
     })
   }, [puntos, mapReady])
 
@@ -103,12 +141,18 @@ export default function MapView({
   useEffect(() => {
     if (!mapReady || !mapRef.current) return
 
-    markersRef.current.forEach(({ id, marker, el }) => {
+    markersRef.current.forEach(({ id, el, popup }) => {
       const isActive = activePunto?.id === id
       el.classList.toggle('map-marker--active', isActive)
-      const popup = marker.getPopup()
-      if (isActive && !popup.isOpen()) marker.togglePopup()
-      if (!isActive && popup.isOpen()) marker.togglePopup()
+
+      if (isActive && !popup.isOpen()) {
+        popup.addTo(mapRef.current)
+      }
+      if (!isActive && popup.isOpen()) {
+        closingProgrammaticallyRef.current = true
+        popup.remove()
+        closingProgrammaticallyRef.current = false
+      }
     })
 
     if (!activePunto) return
