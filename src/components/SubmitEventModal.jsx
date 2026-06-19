@@ -103,9 +103,9 @@ export default function SubmitEventModal({ isOpen, onClose }) {
               <h4>Tipo de postulante *</h4>
               <div className="postulante-options">
                 {[
-                  { value: 'empresario', label: 'Empresario', icon: '🏢' },
-                  { value: 'colaborador', label: 'Colaborador', icon: '👥' },
-                  { value: 'voluntario', label: 'Voluntario', icon: '🤝' },
+                  { value: 'empresario', label: 'Empresario', icon: '' },
+                  { value: 'colaborador', label: 'Colaborador', icon: '' },
+                  { value: 'voluntario', label: 'Voluntario', icon: '' },
                 ].map(opt => (
                   <label key={opt.value} className="postulante-option">
                     <input
