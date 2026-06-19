@@ -35,6 +35,45 @@ const SEED_COMENTARIOS = {
   12: [
     { id: 1, nombre: 'Camila Ríos', texto: 'El desayuno payanés que sirven es espectacular. El café de origen caucano es simplemente el mejor que he tomado.', valoracion: 5, fecha: '2026-06-13T08:30:00Z' },
   ],
+  14: [
+    { id: 1, nombre: 'Sandra Ruiz', texto: 'El cine es excelente y la variedad de tiendas es la mejor de Popayán. Pasé una tarde perfecta de compras con toda la familia.', valoracion: 4, fecha: '2026-06-16T16:00:00Z' },
+    { id: 2, nombre: 'Felipe Arcos', texto: 'La plazoleta de comidas tiene buenas opciones. Fui al Cinemark y la experiencia fue muy buena para ser una ciudad intermedia.', valoracion: 4, fecha: '2026-06-10T19:00:00Z' },
+  ],
+  15: [
+    { id: 1, nombre: 'Mauricio Leal', texto: 'Muy cómodo para hacer diligencias rápidas antes de tomar el vuelo. Tiene todo lo básico y el parqueadero es amplio.', valoracion: 4, fecha: '2026-06-14T11:00:00Z' },
+  ],
+  16: [
+    { id: 1, nombre: 'Patricia Herrera', texto: 'Las colecciones de mariposas son increíbles. Los niños quedaron fascinados con los fósiles y los especímenes de aves caucanas.', valoracion: 5, fecha: '2026-06-12T10:30:00Z' },
+    { id: 2, nombre: 'Andrés Pinto', texto: 'Un museo universitario de primer nivel. La guía fue muy didáctica y la colección de lepidópteros es simplemente espectacular.', valoracion: 5, fecha: '2026-06-08T14:00:00Z' },
+  ],
+  17: [
+    { id: 1, nombre: 'Laura Mosquera', texto: 'El ambiente nocturno es excelente. Los bares con cócteles de frutas locales son muy creativos. Muy recomendado para los viernes.', valoracion: 4, fecha: '2026-06-13T23:00:00Z' },
+  ],
+  18: [
+    { id: 1, nombre: 'Carolina Bolaños', texto: 'Compré tejidos indígenas bellísimos directamente a los artesanos. Los dulces típicos son deliciosos. Muy auténtico y con precios justos.', valoracion: 5, fecha: '2026-06-15T15:30:00Z' },
+    { id: 2, nombre: 'Tomás Vega', texto: 'Un lugar encantador para conocer la artesanía caucana. El ambiente colonial en miniatura es muy fotogénico. Muy recomendado.', valoracion: 5, fecha: '2026-06-09T12:00:00Z' },
+  ],
+  19: [
+    { id: 1, nombre: 'Natalia Cifuentes', texto: 'El lomo en salsa de mora es una experiencia gastronómica única. Sabores que no vas a encontrar en ningún otro lugar de Colombia.', valoracion: 5, fecha: '2026-06-17T13:30:00Z' },
+  ],
+  20: [
+    { id: 1, nombre: 'Germán Flórez', texto: 'El patio del claustro es majestuoso. La luz entrando por los arcos coloniales a mediodía es espectacular. Un must del centro histórico.', valoracion: 5, fecha: '2026-06-11T12:30:00Z' },
+    { id: 2, nombre: 'Isabel Paz', texto: 'El retablo barroco de la iglesia es impresionante. Fui a una misa y la experiencia con toda esa arquitectura colonial fue muy emotiva.', valoracion: 5, fecha: '2026-06-06T11:00:00Z' },
+  ],
+  21: [
+    { id: 1, nombre: 'Ana Lucía Torres', texto: 'Una joya escondida del centro histórico. El silencio y la devoción que se respiran dentro son únicos comparados con las iglesias grandes.', valoracion: 5, fecha: '2026-06-14T09:00:00Z' },
+  ],
+  22: [
+    { id: 1, nombre: 'Eduardo Mera', texto: 'Las pinturas de la Escuela de Quito son sorprendentes. Vale mucho la pena detenerse a apreciar los detalles del arte colonial.', valoracion: 5, fecha: '2026-06-10T16:00:00Z' },
+    { id: 2, nombre: 'Marcela Palacios', texto: 'Templo muy hermoso e histórico. La conexión con la Universidad del Cauca le da un ambiente especial de saber y tradición payanesa.', valoracion: 5, fecha: '2026-06-04T10:30:00Z' },
+  ],
+  23: [
+    { id: 1, nombre: 'Sebastián Muñoz', texto: 'Subí con mi familia al amanecer y la vista de la ciudad iluminándose fue mágica. El esfuerzo de la subida vale completamente la pena.', valoracion: 5, fecha: '2026-06-16T07:00:00Z' },
+    { id: 2, nombre: 'Adriana López', texto: 'El Volcán Puracé se ve clarísimo desde arriba en días despejados. Lleva agua y calzado adecuado. La vista 360 es absolutamente increíble.', valoracion: 5, fecha: '2026-06-08T08:30:00Z' },
+  ],
+  24: [
+    { id: 1, nombre: 'Claudia Martínez', texto: 'Perfecto para un día familiar. Las piscinas están limpias y las zonas verdes son amplias. Los niños disfrutaron muchísimo todo el día.', valoracion: 4, fecha: '2026-06-15T17:00:00Z' },
+  ],
 }
 
 function Stars({ value, onChange }) {
@@ -271,6 +310,17 @@ export default function LugarTuristico() {
               </div>
             )}
           </div>
+
+          {/* ── Dato curioso ── */}
+          {lugar.datoCurioso && (
+            <div className="lt-dato-curioso">
+              <span className="lt-dato-curioso-icon">💡</span>
+              <div className="lt-dato-curioso-body">
+                <strong>¿Sabías que...?</strong>
+                <p>{lugar.datoCurioso}</p>
+              </div>
+            </div>
+          )}
 
           {/* ── Recomendaciones ── */}
           <section className="lt-recs-section">

@@ -14,7 +14,7 @@ const PREFERENCIAS = [
   { label: 'Deportes', emoji: '⚽' },
 ]
 
-const CATEGORIAS = ['Todo', 'Gastronomía', 'Arte', 'Cultura', 'Turismo', 'Vida Nocturna']
+const CATEGORIAS = ['Todo', 'Gastronomía', 'Arte', 'Cultura', 'Turismo', 'Vida Nocturna', 'Comercial', 'Recreativo']
 
 // ── Algoritmo vecino más cercano para ordenar paradas ──
 function ordenarPorCercania(inicio, lugares) {
