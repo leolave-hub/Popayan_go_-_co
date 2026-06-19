@@ -15,7 +15,7 @@ const PREFERENCIAS = [
   { label: 'Deportes', emoji: '⚽' },
 ]
 
-const CATEGORIAS = ['Todo', 'Gastronomía', 'Arte', 'Música', 'Cultura', 'Turismo']
+const CATEGORIAS = ['Todo', 'Gastronomía', 'Arte', 'Música', 'Cultura', 'Turismo', 'Vida Nocturna']
 
 export default function Home() {
   const navigate = useNavigate()
