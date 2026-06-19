@@ -9,40 +9,40 @@ const DATOS_SEED = [
   // ── Hoy (18 jun) ──
   { origen: 'Colombia',       edad: '28', preferencias: ['Cultura', 'Historia', 'Arte'],          fecha: '2026-06-18T10:15:00Z' },
   { origen: 'Colombia',       edad: '34', preferencias: ['Gastronomía', 'Turismo'],               fecha: '2026-06-18T11:40:00Z' },
-  { origen: 'Venezuela',      edad: '22', preferencias: ['Arte', 'Música'],                       fecha: '2026-06-18T14:05:00Z' },
+  { origen: 'Venezuela',      edad: '22', preferencias: ['Arte'],                                 fecha: '2026-06-18T14:05:00Z' },
   { origen: 'España',         edad: '45', preferencias: ['Historia', 'Gastronomía', 'Cultura'],   fecha: '2026-06-18T16:30:00Z' },
   // ── 17 jun ──
-  { origen: 'Colombia',       edad: '29', preferencias: ['Música', 'Arte'],                       fecha: '2026-06-17T09:20:00Z' },
+  { origen: 'Colombia',       edad: '29', preferencias: ['Arte'],                                 fecha: '2026-06-17T09:20:00Z' },
   { origen: 'Colombia',       edad: '41', preferencias: ['Historia', 'Cultura'],                  fecha: '2026-06-17T15:00:00Z' },
   // ── 16 jun ──
-  { origen: 'Colombia',       edad: '19', preferencias: ['Música', 'Naturaleza'],                 fecha: '2026-06-16T10:00:00Z' },
+  { origen: 'Colombia',       edad: '19', preferencias: ['Naturaleza'],                           fecha: '2026-06-16T10:00:00Z' },
   { origen: 'Ecuador',        edad: '33', preferencias: ['Turismo', 'Historia'],                  fecha: '2026-06-16T14:30:00Z' },
   // ── 15 jun ──
   { origen: 'Colombia',       edad: '26', preferencias: ['Arte', 'Gastronomía'],                  fecha: '2026-06-15T11:00:00Z' },
   { origen: 'Colombia',       edad: '38', preferencias: ['Cultura', 'Historia', 'Arte'],          fecha: '2026-06-15T16:00:00Z' },
   // ── 14 jun ──
-  { origen: 'Colombia',       edad: '31', preferencias: ['Gastronomía', 'Música'],                fecha: '2026-06-14T10:30:00Z' },
+  { origen: 'Colombia',       edad: '31', preferencias: ['Gastronomía'],                          fecha: '2026-06-14T10:30:00Z' },
   // ── 13 jun ──
   { origen: 'Colombia',       edad: '55', preferencias: ['Historia', 'Cultura'],                  fecha: '2026-06-13T09:00:00Z' },
   // ── 12 jun ──
   { origen: 'Colombia',       edad: '27', preferencias: ['Turismo', 'Naturaleza'],                fecha: '2026-06-12T13:00:00Z' },
   // ── 10 jun ──
   { origen: 'Estados Unidos', edad: '38', preferencias: ['Historia', 'Cultura', 'Gastronomía'],  fecha: '2026-06-10T15:00:00Z' },
-  { origen: 'Colombia',       edad: '24', preferencias: ['Arte', 'Música', 'Gastronomía'],        fecha: '2026-06-10T11:00:00Z' },
+  { origen: 'Colombia',       edad: '24', preferencias: ['Arte', 'Gastronomía'],                  fecha: '2026-06-10T11:00:00Z' },
   { origen: 'Colombia',       edad: '44', preferencias: ['Cultura', 'Historia'],                  fecha: '2026-06-10T09:30:00Z' },
   // ── 8 jun ──
-  { origen: 'Argentina',      edad: '31', preferencias: ['Arte', 'Música', 'Gastronomía'],        fecha: '2026-06-08T10:00:00Z' },
+  { origen: 'Argentina',      edad: '31', preferencias: ['Arte', 'Gastronomía'],                  fecha: '2026-06-08T10:00:00Z' },
   { origen: 'Colombia',       edad: '47', preferencias: ['Historia', 'Turismo'],                  fecha: '2026-06-08T14:00:00Z' },
   // ── 5 jun ──
   { origen: 'México',         edad: '27', preferencias: ['Historia', 'Cultura'],                  fecha: '2026-06-05T12:00:00Z' },
   { origen: 'Venezuela',      edad: '45', preferencias: ['Turismo', 'Gastronomía'],               fecha: '2026-06-05T10:00:00Z' },
   { origen: 'Colombia',       edad: '36', preferencias: ['Arte', 'Gastronomía'],                  fecha: '2026-06-05T16:00:00Z' },
   // ── 3 jun ──
-  { origen: 'Colombia',       edad: '29', preferencias: ['Arte', 'Música'],                       fecha: '2026-06-03T09:00:00Z' },
-  { origen: 'Colombia',       edad: '34', preferencias: ['Música', 'Cultura'],                    fecha: '2026-06-03T14:00:00Z' },
+  { origen: 'Colombia',       edad: '29', preferencias: ['Arte'],                                 fecha: '2026-06-03T09:00:00Z' },
+  { origen: 'Colombia',       edad: '34', preferencias: ['Cultura'],                              fecha: '2026-06-03T14:00:00Z' },
   // ── 28 may ──
-  { origen: 'Colombia',       edad: '32', preferencias: ['Gastronomía', 'Arte', 'Música'],        fecha: '2026-05-28T10:00:00Z' },
-  { origen: 'Colombia',       edad: '23', preferencias: ['Deportes', 'Música'],                   fecha: '2026-05-28T11:00:00Z' },
+  { origen: 'Colombia',       edad: '32', preferencias: ['Gastronomía', 'Arte'],                  fecha: '2026-05-28T10:00:00Z' },
+  { origen: 'Colombia',       edad: '23', preferencias: ['Deportes'],                             fecha: '2026-05-28T11:00:00Z' },
   { origen: 'Colombia',       edad: '52', preferencias: ['Historia', 'Cultura', 'Gastronomía'],   fecha: '2026-05-28T15:00:00Z' },
   // ── 25 may ──
   { origen: 'Ecuador',        edad: '28', preferencias: ['Turismo', 'Naturaleza', 'Arte'],        fecha: '2026-05-25T09:00:00Z' },
@@ -51,23 +51,23 @@ const DATOS_SEED = [
   { origen: 'España',         edad: '39', preferencias: ['Historia', 'Arte', 'Gastronomía'],      fecha: '2026-05-20T10:00:00Z' },
   { origen: 'Colombia',       edad: '25', preferencias: ['Turismo', 'Naturaleza'],                fecha: '2026-05-20T11:00:00Z' },
   { origen: 'Colombia',       edad: '42', preferencias: ['Cultura', 'Historia'],                  fecha: '2026-05-20T13:00:00Z' },
-  { origen: 'Colombia',       edad: '30', preferencias: ['Arte', 'Música', 'Cultura'],            fecha: '2026-05-20T16:00:00Z' },
+  { origen: 'Colombia',       edad: '30', preferencias: ['Arte', 'Cultura'],                      fecha: '2026-05-20T16:00:00Z' },
   // ── 10 may ──
   { origen: 'Chile',          edad: '36', preferencias: ['Historia', 'Gastronomía', 'Arte'],      fecha: '2026-05-10T10:00:00Z' },
-  { origen: 'Colombia',       edad: '18', preferencias: ['Música', 'Arte', 'Deportes'],           fecha: '2026-05-10T11:00:00Z' },
+  { origen: 'Colombia',       edad: '18', preferencias: ['Arte', 'Deportes'],                     fecha: '2026-05-10T11:00:00Z' },
   { origen: 'Colombia',       edad: '48', preferencias: ['Gastronomía', 'Naturaleza'],            fecha: '2026-05-10T14:00:00Z' },
   // ── 1 may ──
   { origen: 'Venezuela',      edad: '35', preferencias: ['Turismo', 'Cultura'],                   fecha: '2026-05-01T09:00:00Z' },
-  { origen: 'Colombia',       edad: '26', preferencias: ['Arte', 'Música'],                       fecha: '2026-05-01T11:00:00Z' },
+  { origen: 'Colombia',       edad: '26', preferencias: ['Arte'],                                 fecha: '2026-05-01T11:00:00Z' },
   { origen: 'Colombia',       edad: '53', preferencias: ['Historia', 'Cultura', 'Gastronomía'],   fecha: '2026-05-01T15:00:00Z' },
   // ── 20 abr ──
   { origen: 'Colombia',       edad: '37', preferencias: ['Arte', 'Gastronomía'],                  fecha: '2026-04-20T10:00:00Z' },
-  { origen: 'Colombia',       edad: '20', preferencias: ['Música', 'Deportes'],                   fecha: '2026-04-20T12:00:00Z' },
+  { origen: 'Colombia',       edad: '20', preferencias: ['Deportes'],                             fecha: '2026-04-20T12:00:00Z' },
   { origen: 'Colombia',       edad: '44', preferencias: ['Cultura', 'Historia', 'Turismo'],       fecha: '2026-04-20T15:00:00Z' },
   // ── 15 abr ──
   { origen: 'Colombia',       edad: '31', preferencias: ['Historia', 'Arte'],                     fecha: '2026-04-15T09:00:00Z' },
   { origen: 'España',         edad: '58', preferencias: ['Historia', 'Gastronomía'],              fecha: '2026-04-15T11:00:00Z' },
-  { origen: 'Colombia',       edad: '29', preferencias: ['Arte', 'Música', 'Naturaleza'],         fecha: '2026-04-15T14:00:00Z' },
+  { origen: 'Colombia',       edad: '29', preferencias: ['Arte', 'Naturaleza'],                   fecha: '2026-04-15T14:00:00Z' },
   { origen: 'Ecuador',        edad: '41', preferencias: ['Turismo', 'Historia', 'Gastronomía'],   fecha: '2026-04-15T16:00:00Z' },
   { origen: 'Colombia',       edad: '33', preferencias: ['Gastronomía', 'Cultura'],               fecha: '2026-04-15T17:00:00Z' },
 ]
@@ -75,7 +75,7 @@ const DATOS_SEED = [
 /* ─────────────────────────────────────────
    Constantes
 ───────────────────────────────────────── */
-const PREFS_LISTA = ['Gastronomía','Turismo','Arte','Música','Cultura','Historia','Naturaleza','Deportes']
+const PREFS_LISTA = ['Gastronomía','Turismo','Arte','Cultura','Historia','Naturaleza','Deportes']
 
 const GRUPOS_EDAD = [
   { etiqueta: 'Menos de 25', min: 0,  max: 24  },

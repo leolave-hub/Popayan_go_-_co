@@ -1,6 +1,5 @@
 export const CATEGORIAS_INFO = {
   Cultura:     { color: '#B5785A' },
-  Música:      { color: '#7BAF8A' },
   Arte:        { color: '#6B8EAD' },
   Gastronomía: { color: '#C4A35A' },
   Turismo:     { color: '#9B8EC4' },
@@ -65,13 +64,13 @@ export const EVENTOS = [
   },
   {
     id: 6,
-    titulo: 'Encuentro Nacional de Bandas',
-    categoria: 'Música',
-    fechaInicio: '2026-08-07',
-    fechaFin: '2026-08-15',
-    hora: '3:00 PM',
-    lugar: 'Coliseo Los Andes y escenarios del centro',
+    titulo: 'Parche Runner',
+    categoria: 'Deportes',
+    fechaInicio: '2026-06-24',
+    fechaFin: '2026-12-30',
+    hora: '7:00 PM · todos los miércoles',
+    lugar: 'Centro histórico de Popayán',
     descripcion:
-      'Una de las festividades musicales más importantes del sur de Colombia. Bandas de todo el país compiten en desfile y concierto ante miles de espectadores.',
+      'Evento deportivo semanal donde jóvenes se reúnen cada miércoles a las 7 PM en el centro para correr en grupo. Hay dos rutas disponibles: 5 km para principiantes y 10 km para corredores avanzados. Entrada libre, solo necesitas tus ganas de correr.',
   },
 ]

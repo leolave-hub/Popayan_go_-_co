@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react'
 import { EVENTOS, CATEGORIAS_INFO } from '../data/eventos'
 
-const FILTROS_CAT = ['Todo', 'Música', 'Arte', 'Gastronomía', 'Cultura', 'Turismo', 'Deportes']
+const FILTROS_CAT = ['Todo', 'Arte', 'Gastronomía', 'Cultura', 'Turismo', 'Deportes']
 const FILTROS_EST = ['Todo', 'En curso', 'Próximo', 'Finalizado']
 
 const toISO = (d) => {

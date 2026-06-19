@@ -8,14 +8,13 @@ const PREFERENCIAS = [
   { label: 'Gastronomía', emoji: '🍽' },
   { label: 'Turismo', emoji: '🗺' },
   { label: 'Arte', emoji: '🎨' },
-  { label: 'Música', emoji: '🎶' },
   { label: 'Cultura', emoji: '🏛' },
   { label: 'Historia', emoji: '📜' },
   { label: 'Naturaleza', emoji: '🌿' },
   { label: 'Deportes', emoji: '⚽' },
 ]
 
-const CATEGORIAS = ['Todo', 'Gastronomía', 'Arte', 'Música', 'Cultura', 'Turismo', 'Vida Nocturna']
+const CATEGORIAS = ['Todo', 'Gastronomía', 'Arte', 'Cultura', 'Turismo', 'Vida Nocturna']
 
 export default function Home() {
   const navigate = useNavigate()
