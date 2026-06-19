@@ -7,7 +7,7 @@ const INITIAL_ZOOM = 15
 const INITIAL_PITCH = 60
 const INITIAL_BEARING = -17
 
-export default function MapView({ puntos = [], activePunto = null }) {
+export default function MapView({ puntos = [], activePunto = null, onPuntoClick = null }) {
   const containerRef = useRef(null)
   const mapRef = useRef(null)
   const markersRef = useRef([]) // [{ id, marker, el }]
@@ -64,13 +64,26 @@ export default function MapView({ puntos = [], activePunto = null }) {
       el.className = 'map-marker'
       el.innerHTML = `<span>${punto.icon}</span>`
 
-      const popup = new mapboxgl.Popup({ offset: 30, closeButton: false, maxWidth: '200px' })
-        .setHTML(`<strong>${punto.nombre}</strong><p>${punto.descripcion}</p>`)
+      const popup = new mapboxgl.Popup({ offset: 30, closeButton: false, maxWidth: '220px' })
+        .setHTML(
+          `<div class="mapbox-popup-inner">` +
+          `<strong>${punto.nombre}</strong>` +
+          `<p>${punto.descripcion}</p>` +
+          `<a href="/lugar/${punto.id}" class="mapbox-popup-btn">Ver lugar →</a>` +
+          `</div>`
+        )
 
       const marker = new mapboxgl.Marker(el)
         .setLngLat(punto.coords)
         .setPopup(popup)
         .addTo(mapRef.current)
+
+      if (onPuntoClick) {
+        el.addEventListener('click', (e) => {
+          e.stopPropagation()
+          onPuntoClick(punto)
+        })
+      }
 
       markersRef.current.push({ id: punto.id, marker, el })
     })

@@ -310,18 +310,45 @@ button, input, select { font-family: inherit; }
 .poi-card {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 9px 10px;
+  gap: 0;
   border-radius: 8px;
   background: transparent;
   border: 1.5px solid transparent;
-  cursor: pointer;
   transition: all .15s ease;
-  text-align: left;
   width: 100%;
 }
 .poi-card:hover { background: var(--cream); border-color: var(--cream-dk); }
 .poi-card.activo { background: var(--cream); border-color: var(--terra-lt); }
+
+.poi-card-select {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 10px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  flex: 1;
+  min-width: 0;
+  border-radius: 8px 0 0 8px;
+}
+
+.poi-ver-btn {
+  padding: 9px 10px;
+  background: transparent;
+  border: none;
+  border-left: 1px solid transparent;
+  cursor: pointer;
+  color: var(--stone-lt);
+  font-size: 16px;
+  line-height: 1;
+  border-radius: 0 8px 8px 0;
+  transition: color .15s, background .15s, border-color .15s;
+  flex-shrink: 0;
+}
+.poi-card:hover .poi-ver-btn { border-left-color: var(--cream-dk); color: var(--terra); }
+.poi-card.activo .poi-ver-btn { border-left-color: var(--terra-lt); color: var(--terra); }
 
 .poi-icon {
   font-size: 17px;
@@ -1118,6 +1145,33 @@ button, input, select { font-family: inherit; }
 
 .sec-hero-desc { font-size: 14px; color: rgba(255,255,255,.5); }
 
+.sec-hero-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 12px;
+  align-self: center;
+}
+
+.sec-logout-btn {
+  padding: 8px 18px;
+  background: rgba(255,255,255,.07);
+  border: 1px solid rgba(255,255,255,.14);
+  border-radius: 8px;
+  color: rgba(255,255,255,.5);
+  font-size: 12.5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background .15s, color .15s, border-color .15s;
+  font-family: inherit;
+  white-space: nowrap;
+}
+.sec-logout-btn:hover {
+  background: rgba(200,50,50,.15);
+  border-color: rgba(200,50,50,.3);
+  color: #ff9090;
+}
+
 .sec-tabs {
   display: flex;
   background: rgba(255,255,255,.08);
@@ -1290,6 +1344,7 @@ button, input, select { font-family: inherit; }
 }
 @media (max-width: 640px) {
   .sec-hero-band { padding: calc(var(--navbar-h) + 24px) 20px 24px; flex-direction: column; align-items: flex-start; }
+  .sec-hero-right { align-items: flex-start; }
   .sec-container { padding: 20px 16px 48px; }
   .sec-cards { grid-template-columns: 1fr 1fr; gap: 12px; }
   .sec-panel { padding: 20px; }
@@ -1479,7 +1534,21 @@ button, input, select { font-family: inherit; }
 .mapboxgl-popup-content p {
   font-size: 12px;
   color: #7A6657;
-  margin: 0;
+  margin: 0 0 10px;
   font-family: system-ui, 'Segoe UI', sans-serif;
   line-height: 1.4;
 }
+
+.mapbox-popup-btn {
+  display: inline-block;
+  padding: 5px 14px;
+  background: var(--terra);
+  color: #fff !important;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  font-family: system-ui, 'Segoe UI', sans-serif;
+  transition: background .15s;
+}
+.mapbox-popup-btn:hover { background: var(--terra-lt); }

@@ -1,4 +1,6 @@
 import { useState, useMemo, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { AUTH_KEY } from '../data/lugares'
 
 /* ─────────────────────────────────────────
    Datos de muestra históricos
@@ -184,13 +186,23 @@ function BarraV({ datos, color }) {
    Componente principal
 ───────────────────────────────────────── */
 export default function Secretaria() {
+  const navigate = useNavigate()
   const [periodoIdx, setPeriodoIdx] = useState(3)
   const [locales, setLocales]       = useState([])
 
   useEffect(() => {
+    if (!sessionStorage.getItem(AUTH_KEY)) {
+      navigate('/secretaria/login', { replace: true })
+      return
+    }
     const saved = JSON.parse(localStorage.getItem('popayan_encuestas') || '[]')
     setLocales(saved)
-  }, [])
+  }, [navigate])
+
+  const handleLogout = () => {
+    sessionStorage.removeItem(AUTH_KEY)
+    navigate('/secretaria/login')
+  }
 
   const todos  = useMemo(() => [...DATOS_SEED, ...locales], [locales])
   const datos  = useMemo(() => filtrarPeriodo(todos, PERIODOS[periodoIdx].dias), [todos, periodoIdx])
@@ -210,20 +222,25 @@ export default function Secretaria() {
       {/* ── Cabecera ── */}
       <div className="sec-hero-band">
         <div className="sec-hero-text">
-          <p className="sec-hero-sub">Secretaría de Cultura — Popayán</p>
+          <p className="sec-hero-sub">Secretaría de Cultura — Popayán · Cauca</p>
           <h1>Panel de visitantes</h1>
-          <p className="sec-hero-desc">Análisis de respuestas a la encuesta de experiencia</p>
+          <p className="sec-hero-desc">Análisis de respuestas a la encuesta de experiencia turística</p>
         </div>
-        <div className="sec-tabs">
-          {PERIODOS.map((p, i) => (
-            <button
-              key={p.label}
-              className={`sec-tab${periodoIdx === i ? ' activo' : ''}`}
-              onClick={() => setPeriodoIdx(i)}
-            >
-              {p.label}
-            </button>
-          ))}
+        <div className="sec-hero-right">
+          <div className="sec-tabs">
+            {PERIODOS.map((p, i) => (
+              <button
+                key={p.label}
+                className={`sec-tab${periodoIdx === i ? ' activo' : ''}`}
+                onClick={() => setPeriodoIdx(i)}
+              >
+                {p.label}
+              </button>
+            ))}
+          </div>
+          <button className="sec-logout-btn" onClick={handleLogout}>
+            Cerrar sesión
+          </button>
         </div>
       </div>
 
@@ -233,17 +250,25 @@ export default function Secretaria() {
           <div className="sec-card">
             <span className="sec-card-label">Total encuestados</span>
             <span className="sec-card-valor">{datos.length}</span>
+            <span className="sec-card-sub">en el período seleccionado</span>
           </div>
 
           <div className="sec-card">
             <span className="sec-card-label">Edad promedio</span>
             <span className="sec-card-valor">{edadProm || '—'}<span className="sec-card-unit"> años</span></span>
+            <span className="sec-card-sub">de los visitantes</span>
           </div>
-          
+
           <div className="sec-card">
             <span className="sec-card-label">Interés principal</span>
             <span className="sec-card-valor sec-card-valor--md">{topPref}</span>
             <span className="sec-card-sub">{preferencias[0]?.valor || 0} menciones</span>
+          </div>
+
+          <div className="sec-card">
+            <span className="sec-card-label">País de origen top</span>
+            <span className="sec-card-valor sec-card-valor--md">{topOrigen}</span>
+            <span className="sec-card-sub">{origenes[0]?.valor || 0} visitantes</span>
           </div>
         </div>
 

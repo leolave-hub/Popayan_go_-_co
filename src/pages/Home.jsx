@@ -1,6 +1,8 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import MapView from '../components/MapView'
 import heroImg from '../assets/hero.jpg'
+import { PUNTOS_INTERES } from '../data/lugares'
 
 const PREFERENCIAS = [
   { label: 'Gastronomía', emoji: '🍽' },
@@ -15,22 +17,8 @@ const PREFERENCIAS = [
 
 const CATEGORIAS = ['Todo', 'Gastronomía', 'Arte', 'Música', 'Cultura', 'Turismo']
 
-const PUNTOS_INTERES = [
-  { id: 1,  nombre: 'Parque Caldas',             categoria: 'Turismo',      coords: [-76.6062, 2.4418], icon: '🏛', descripcion: 'Plaza principal de la ciudad blanca' },
-  { id: 2,  nombre: 'Catedral Basílica',          categoria: 'Cultura',     coords: [-76.606469, 2.441424], icon: '⛪', descripcion: 'Catedral Nuestra Señora de la Asunción' },
-  { id: 3,  nombre: 'Puente del Humilladero',     categoria: 'Turismo',     coords: [-76.605112, 2.444202], icon: '🌉', descripcion: 'Histórico puente colonial del siglo XIX' },
-  { id: 4,  nombre: 'Iglesia de San Francisco',   categoria: 'Cultura',     coords: [-76.608425, 2.443390], icon: '⛪', descripcion: 'Templo colonial del siglo XVIII' },
-  { id: 5,  nombre: 'Morro de Tulcán',            categoria: 'Turismo',     coords: [ -76.600220,2.444609], icon: '🗿', descripcion: 'Colina con estatua de Sebastián de Belalcázar' },
-  { id: 6,  nombre: 'Teatro Guillermo Valencia',  categoria: 'Arte',        coords: [-76.6060, 2.4432], icon: '🎭', descripcion: 'Teatro municipal del centro histórico' },
-  { id: 7,  nombre: 'Capilla de Belén',           categoria: 'Cultura',     coords: [-76.599735, 2.439517], icon: '⛪', descripcion: 'Capilla colonial del siglo XVII' },
-  { id: 8,  nombre: 'Museo Guillermo Valencia',   categoria: 'Arte',        coords: [-76.605300, 2.443254], icon: '🎨', descripcion: 'Casa natal del poeta laureado' },
-  { id: 9,  nombre: 'Casa Mosquera',              categoria: 'Cultura',     coords: [-76.604611, 2.442800], icon: '🏠', descripcion: 'Museo histórico del General Mosquera' },
-  { id: 10, nombre: 'Casa Valencia',              categoria: 'Arte',        coords: [-76.609368, 2.442401], icon: '📚', descripcion: 'Museo de arte y literatura' },
-  { id: 11, nombre: 'La Iguana',                  categoria: 'Gastronomía', coords: [-76.608862, 2.443214], icon: '🍽', descripcion: 'Gastronomía típica caucana' },
-  { id: 12, nombre: 'El Sotareño',                categoria: 'Gastronomía', coords: [-76.606063, 2.443950], icon: '🍲', descripcion: 'Cocina tradicional colombiana' },
-]
-
 export default function Home() {
+  const navigate = useNavigate()
   const [categoriaActiva, setCategoriaActiva] = useState('Todo')
   const [puntoActivo, setPuntoActivo] = useState(null)
   const [form, setForm] = useState({ origen: '', edad: '', preferencias: [] })
@@ -102,7 +90,11 @@ export default function Home() {
 
         <div className="mapa-wrap">
           <div className="mapa-map">
-            <MapView puntos={puntosFiltrados} activePunto={puntoActivo} />
+            <MapView
+              puntos={puntosFiltrados}
+              activePunto={puntoActivo}
+              onPuntoClick={(punto) => navigate(`/lugar/${punto.id}`)}
+            />
           </div>
 
           <div className="mapa-lista-panel">
@@ -112,17 +104,28 @@ export default function Home() {
             </div>
             <div className="lista-items">
               {puntosFiltrados.map(punto => (
-                <button
+                <div
                   key={punto.id}
                   className={`poi-card${puntoActivo?.id === punto.id ? ' activo' : ''}`}
-                  onClick={() => handleSelectPunto(punto)}
                 >
-                  <span className="poi-icon">{punto.icon}</span>
-                  <div className="poi-info">
-                    <span className="poi-nombre">{punto.nombre}</span>
-                    <span className="poi-cat-tag">{punto.categoria}</span>
-                  </div>
-                </button>
+                  <button
+                    className="poi-card-select"
+                    onClick={() => handleSelectPunto(punto)}
+                  >
+                    <span className="poi-icon">{punto.icon}</span>
+                    <div className="poi-info">
+                      <span className="poi-nombre">{punto.nombre}</span>
+                      <span className="poi-cat-tag">{punto.categoria}</span>
+                    </div>
+                  </button>
+                  <button
+                    className="poi-ver-btn"
+                    onClick={() => navigate(`/lugar/${punto.id}`)}
+                    title="Ver página del lugar"
+                  >
+                    →
+                  </button>
+                </div>
               ))}
             </div>
           </div>

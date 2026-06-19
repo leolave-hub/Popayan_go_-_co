@@ -43,7 +43,7 @@ export default function Navbar() {
 
         <Link
           to="/secretaria"
-          className={`nav-link nav-link--admin${pathname === '/secretaria' ? ' nav-link--active' : ''}`}
+          className={`nav-link nav-link--admin${pathname.startsWith('/secretaria') ? ' nav-link--active' : ''}`}
         >
           Secretaría
         </Link>
