@@ -1,7 +1,9 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import MapView from '../components/MapView'
 import heroImg from '../assets/hero.jpg'
+import imagen1 from '../assets/imagen1.jpg'
+import imagen2 from '../assets/imagen2.jpg'
 import { PUNTOS_INTERES } from '../data/lugares'
 import { EVENTOS, CATEGORIAS_INFO } from '../data/eventos'
 import { RUTAS_CURADAS } from '../data/rutas'
@@ -74,6 +76,12 @@ const formatFecha = (str) =>
     weekday: 'short', day: 'numeric', month: 'short',
   })
 
+const HERO_IMAGES = [
+  imagen2, // "Imagen 2" (principal)
+  imagen1, // "Imagen 1"
+  heroImg  // "Imagen original"
+]
+
 export default function Home() {
   const navigate = useNavigate()
   const mapaSectionRef = useRef(null)
@@ -91,6 +99,15 @@ export default function Home() {
   const [rutaOrdenada, setRutaOrdenada] = useState([])
   const [calculando, setCalculando] = useState(false)
   const [rutaError, setRutaError] = useState(null)
+  
+  const [heroImageIdx, setHeroImageIdx] = useState(0)
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setHeroImageIdx(prev => (prev + 1) % HERO_IMAGES.length)
+    }, 7000)
+    return () => clearInterval(interval)
+  }, [])
 
   const eventosFinDeSemana = getEventosFinDeSemana()
   const puntosFiltrados = categoriaActiva === 'Todo'
@@ -167,35 +184,34 @@ export default function Home() {
 
   return (
     <main>
-      {/* ── Hero editorial ── */}
-      <section className="hero">
-        <img src={heroImg} className="hero-bg-img" alt="Popayán, la Ciudad Blanca" />
-        <div className="hero-overlay">
-          <div className="hero-content">
-            <div className="hero-pills">
-              <span className="hero-pill">Patrimonio colonial UNESCO</span>
-              <span className="hero-pill">Gastronomía andina</span>
-              <span className="hero-pill">Semana Santa declarada Patrimonio</span>
-            </div>
-            <h1 className="hero-h1">
-              La ciudad donde<br />el tiempo se detiene
-            </h1>
-            <p className="hero-sub">
-              Descubre Popayán, la Ciudad Blanca del sur de Colombia.
-              Historia, cultura y sabores que te esperan.
-            </p>
-            <div className="hero-actions">
-              <button className="hero-btn hero-btn--primary" onClick={scrollAlMapa}>
-                Explorar el mapa
-              </button>
-              <Link to="/eventos" className="hero-btn hero-btn--ghost">
-                Ver eventos
-              </Link>
-            </div>
+      {/* ── Hero Large Image Slider ── */}
+      <section className="hero-large">
+        <div className="hero-image-container">
+          {HERO_IMAGES.map((src, idx) => (
+            <img 
+              key={src} 
+              src={src} 
+              alt={`Popayán ${idx + 1}`} 
+              className={`hero-main-img hero-main-img--slide ${idx === heroImageIdx ? 'active' : ''}`} 
+            />
+          ))}
+          <div className="hero-overlay-gradient"></div>
+          
+          <h1 className="hero-marca-texto">La ciudad blanca de Colombia</h1>
+        </div>
+
+        <div className="hero-bottom-bar">
+          <p className="hero-bottom-desc">
+            Descubre un patrimonio colonial vivo. Historia, cultura y tradición en cada rincón.
+          </p>
+          <div className="hero-bottom-actions">
+            <button className="hero-btn-pill hero-btn-pill--primary" onClick={scrollAlMapa}>
+              Explorar el mapa <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
+            </button>
+            <Link to="/eventos" className="hero-btn-pill hero-btn-pill--ghost">
+              Ver calendario
+            </Link>
           </div>
-          <button className="hero-scroll-arrow" onClick={scrollAlMapa} aria-label="Ir al mapa">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
-          </button>
         </div>
       </section>
 

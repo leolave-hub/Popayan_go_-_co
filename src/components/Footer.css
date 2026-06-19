@@ -20,7 +20,7 @@
   gap: 8px;
   text-decoration: none;
   color: #fff;
-  font-family: 'Playfair Display', serif;
+  font-family: var(--font-display);
   font-size: 18px;
   font-weight: 700;
   margin-bottom: 14px;

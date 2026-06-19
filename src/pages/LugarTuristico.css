@@ -188,7 +188,7 @@
 }
 
 .lt-hero-titulo {
-  font-family: 'Playfair Display', serif;
+  font-family: var(--font-display);
   font-size: clamp(28px, 5vw, 54px);
   font-weight: 800;
   color: #fff;
@@ -495,7 +495,7 @@
 
 /* ─── Sección título ─── */
 .lt-section-titulo {
-  font-family: 'Playfair Display', serif;
+  font-family: var(--font-display);
   font-size: 24px;
   font-weight: 700;
   color: var(--stone);

@@ -6,23 +6,23 @@
    1. TOKENS Y VARIABLES
 ───────────────────────────────────────── */
 :root {
-  --cream:    #F8F3EC;
-  --cream-dk: #EEE6D5;
-  --stone:    #1C1410;
-  --stone-lt: #7A6657;
-  --terra:    #B5533A;
-  --terra-lt: #D4744A;
-  --terra-pale: #F0D5C8;
+  --cream:    #FAF8F4;
+  --cream-dk: #E8E4DD;
+  --stone:    #1F1B24;
+  --stone-lt: #7A6F5E;
+  --terra:    #4A2C5C;
+  --terra-lt: #6A4480;
+  --terra-pale: #DBCDE6;
   --sage:     #3D6650;
   --sage-lt:  #7BAF8A;
-  --gold:     #C9912A;
+  --gold:     #C9A227;
   --white:    #FFFFFF;
   --radius:   14px;
-  --shadow:   0 2px 20px rgba(28,20,16,.08);
-  --shadow-md: 0 4px 20px rgba(28,20,16,.1);
+  --shadow:   0 2px 20px rgba(31,27,36,.08);
+  --shadow-md: 0 4px 20px rgba(31,27,36,.1);
   --navbar-h: 64px;
-  --font-display: 'Playfair Display', Georgia, serif;
-  --font-body: 'Inter', system-ui, sans-serif;
+  --font-display: 'Sora', system-ui, sans-serif;
+  --font-body: 'Sora', system-ui, sans-serif;
 }
 
 /* ─────────────────────────────────────────
