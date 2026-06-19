@@ -457,18 +457,7 @@ const puntosFiltrados = categoriaActiva === 'Todo'
           </button>
         </div>
 
-        <div className="cta-divider" />
 
-        <div className="cta-registro">
-          <p className="cta-label">Guarda tus favoritos</p>
-          <h3>Crea tu cuenta de viajero</h3>
-          <p className="cta-desc">
-            Guarda lugares, planifica tu itinerario y recibe recomendaciones personalizadas.
-          </p>
-          <Link to="/registro" className="btn-registro">
-            Registrarme gratis
-          </Link>
-        </div>
       </section>
 
       {/* ── Modal encuesta ── */}
