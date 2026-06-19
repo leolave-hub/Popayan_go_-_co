@@ -6,18 +6,23 @@
    1. TOKENS Y VARIABLES
 ───────────────────────────────────────── */
 :root {
-  --cream:    #F7F2EA;
-  --cream-dk: #EEE6D8;
-  --stone:    #3D2E22;
+  --cream:    #F8F3EC;
+  --cream-dk: #EEE6D5;
+  --stone:    #1C1410;
   --stone-lt: #7A6657;
-  --terra:    #B5785A;
-  --terra-lt: #D4977A;
-  --sage:     #7BAF8A;
-  --sage-lt:  #A8CDB4;
+  --terra:    #B5533A;
+  --terra-lt: #D4744A;
+  --terra-pale: #F0D5C8;
+  --sage:     #3D6650;
+  --sage-lt:  #7BAF8A;
+  --gold:     #C9912A;
   --white:    #FFFFFF;
   --radius:   14px;
-  --shadow:   0 2px 20px rgba(61,46,34,.08);
+  --shadow:   0 2px 20px rgba(28,20,16,.08);
+  --shadow-md: 0 4px 20px rgba(28,20,16,.1);
   --navbar-h: 64px;
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body: 'Inter', system-ui, sans-serif;
 }
 
 /* ─────────────────────────────────────────
@@ -28,19 +33,24 @@
 body {
   margin: 0;
   overflow-x: hidden;
-  font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
+  font-family: var(--font-body);
   font-size: 16px;
-  line-height: 1.5;
+  line-height: 1.6;
   color: var(--stone);
+  background: var(--white);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 #root { width: 100vw; }
 
-h1, h2, h3, h4 { margin: 0; }
+h1, h2, h3, h4 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 700;
+}
 p  { margin: 0; }
-button, input, select { font-family: inherit; }
+button, input, select, textarea { font-family: var(--font-body); }
 
 /* ─────────────────────────────────────────
    3. NAVBAR
@@ -137,15 +147,134 @@ button, input, select { font-family: inherit; }
   flex-shrink: 0;
 }
 
+/* ── Search button ── */
+.nav-search-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: 1.5px solid transparent;
+  background: transparent;
+  font-size: 13.5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all .15s;
+}
+
+.navbar--glass .nav-search-btn {
+  color: rgba(255,255,255,.78);
+  border-color: rgba(255,255,255,.25);
+}
+.navbar--glass .nav-search-btn:hover {
+  background: rgba(255,255,255,.12);
+  color: #fff;
+}
+.navbar--solid .nav-search-btn {
+  color: var(--stone-lt);
+  border-color: var(--cream-dk);
+  background: var(--white);
+}
+.navbar--solid .nav-search-btn:hover {
+  border-color: var(--terra);
+  color: var(--terra);
+}
+
+/* ── Mobile icon button ── */
+.nav-icon-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background .15s;
+}
+.navbar--glass .nav-icon-btn { color: #fff; }
+.navbar--glass .nav-icon-btn:hover { background: rgba(255,255,255,.12); }
+.navbar--solid .nav-icon-btn { color: var(--stone); }
+.navbar--solid .nav-icon-btn:hover { background: var(--cream-dk); }
+
+/* ── Desktop/mobile visibility ── */
+.navbar-links--desktop { display: flex; align-items: center; gap: 2px; }
+.navbar-mobile-controls { display: none; align-items: center; gap: 4px; }
+
+/* ── Mobile drawer ── */
+.mobile-menu {
+  position: fixed;
+  top: var(--navbar-h);
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--cream);
+  z-index: 800;
+  display: flex;
+  flex-direction: column;
+  padding: 16px 0 40px;
+  animation: menu-in .2s ease;
+}
+
+@keyframes menu-in {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.mobile-menu-links {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.mobile-menu-link {
+  display: block;
+  padding: 18px 28px;
+  font-size: 22px;
+  font-family: var(--font-display);
+  font-weight: 500;
+  color: var(--stone);
+  text-decoration: none;
+  border-bottom: 1px solid var(--cream-dk);
+  transition: background .12s, color .12s;
+}
+
+.mobile-menu-link.active {
+  color: var(--terra);
+}
+
+.mobile-menu-link:hover {
+  background: var(--cream-dk);
+}
+
+.mobile-menu-footer {
+  padding: 24px 28px 0;
+}
+
+.mobile-menu-cta {
+  display: block;
+  text-align: center;
+  padding: 14px 0;
+  background: var(--terra);
+  color: #fff;
+  border-radius: var(--radius);
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background .18s;
+}
+
+.mobile-menu-cta:hover { background: var(--terra-lt); }
+
+@media (max-width: 768px) {
+  .navbar { padding: 0 20px; }
+  .navbar-links--desktop { display: none; }
+  .navbar-mobile-controls { display: flex; }
+}
+
 .navbar--glass .nav-link--admin { color: rgba(255,255,255,.65); }
 .navbar--solid .nav-link--admin { color: var(--stone-lt); }
-
-@media (max-width: 640px) {
-  .navbar { padding: 0 20px; }
-  .navbar-logo { font-size: 15px; }
-  .nav-link { padding: 7px 12px; font-size: 13px; }
-  .navbar-sep { margin: 0 2px; }
-}
 
 /* ─────────────────────────────────────────
    4. HOME — HERO

@@ -1,5 +1,8 @@
+import { useState } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Navbar from './components/Navbar'
+import Footer from './components/Footer'
+import SearchOverlay from './components/SearchOverlay'
 import Home from './pages/Home'
 import Calendario from './pages/Calendario'
 import Eventos from './pages/Eventos'
@@ -9,9 +12,12 @@ import LugarTuristico from './pages/LugarTuristico'
 import RegistroTurista from './pages/turista/RegistroTurista'
 
 export default function App() {
+  const [searchOpen, setSearchOpen] = useState(false)
+
   return (
     <BrowserRouter>
-      <Navbar />
+      <Navbar onSearchOpen={() => setSearchOpen(true)} />
+      <SearchOverlay isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
       <Routes>
         <Route path="/"                    element={<Home />} />
         <Route path="/calendario"          element={<Calendario />} />
@@ -21,6 +27,7 @@ export default function App() {
         <Route path="/lugar/:id"           element={<LugarTuristico />} />
         <Route path="/registro"            element={<RegistroTurista />} />
       </Routes>
+      <Footer />
     </BrowserRouter>
   )
 }
