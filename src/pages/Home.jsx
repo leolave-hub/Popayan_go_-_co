@@ -522,7 +522,7 @@ export default function Home() {
               <>
                 <div className="modal-header">
                   <h2>Cuéntanos sobre ti</h2>
-                  <p>Tus respuestas nos ayudan a mejorar Popayán Go</p>
+                  <p>Tus respuestas nos ayudan a mejorar Pubenza</p>
                 </div>
                 <form className="postulate-form" onSubmit={handleSubmit}>
                   <div className="form-group">

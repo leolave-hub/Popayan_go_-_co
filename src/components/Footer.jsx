@@ -25,7 +25,7 @@ export default function Footer() {
         <div className="footer-brand">
           <Link to="/" className="footer-logo">
             <span className="footer-logo-dot" />
-            Popayán Go
+            Pubenza
           </Link>
           <p className="footer-tagline">
             La plataforma oficial de turismo<br />de la Ciudad Blanca de Colombia
@@ -60,7 +60,7 @@ export default function Footer() {
         <div className="footer-col">
           <h4>Información</h4>
           <ul>
-            <li><a href="#">Acerca de Popayán Go</a></li>
+            <li><a href="#">Acerca de Pubenza</a></li>
             <li><a href="#">Contacto</a></li>
             <li><a href="#">Prensa y medios</a></li>
             <li><Link to="/secretaria/login">Secretaría de Turismo</Link></li>
@@ -69,7 +69,7 @@ export default function Footer() {
       </div>
 
       <div className="footer-base">
-        <span>© 2026 Popayán Go · Secretaría de Turismo del Cauca</span>
+        <span>© 2026 Pubenza · Secretaría de Turismo del Cauca</span>
         <div className="footer-base-links">
           <a href="#">Privacidad</a>
           <a href="#">Accesibilidad</a>

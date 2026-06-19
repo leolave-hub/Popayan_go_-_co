@@ -53,7 +53,7 @@ export default function Navbar({ onSearchOpen }) {
       <nav className={`navbar${glass ? ' navbar--glass' : ' navbar--solid'}`}>
         <Link to="/" className="navbar-logo">
           <span className="navbar-logo-dot" />
-          Popayán Go
+          Pubenza
         </Link>
 
         {/* Desktop links */}

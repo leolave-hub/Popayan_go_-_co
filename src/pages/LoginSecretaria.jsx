@@ -37,7 +37,7 @@ export default function LoginSecretaria() {
       <div className="login-card">
         <Link to="/" className="login-brand">
           <span className="login-brand-dot" />
-          Popayán Go
+          Pubenza
         </Link>
 
         <div className="login-header">
