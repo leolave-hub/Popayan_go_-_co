@@ -109,8 +109,7 @@ export default function Home() {
     return () => clearInterval(interval)
   }, [])
 
-  const eventosFinDeSemana = getEventosFinDeSemana()
-  const puntosFiltrados = categoriaActiva === 'Todo'
+const puntosFiltrados = categoriaActiva === 'Todo'
     ? PUNTOS_INTERES
     : PUNTOS_INTERES.filter(p => p.categoria === categoriaActiva)
 
@@ -215,40 +214,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── Este fin de semana ── */}
-      {eventosFinDeSemana.length > 0 && (
-        <section className="weekend-section">
-          <div className="weekend-inner">
-            <div className="weekend-header">
-              <div>
-                <p className="section-eyebrow">Agenda cultural</p>
-                <h2 className="section-title">Este fin de semana</h2>
-              </div>
-              <Link to="/eventos" className="weekend-ver-todos">
-                Ver todos los eventos →
-              </Link>
-            </div>
-            <div className="weekend-grid">
-              {eventosFinDeSemana.map(ev => {
-                const info = CATEGORIAS_INFO[ev.categoria]
-                return (
-                  <Link key={ev.id} to="/eventos" className="weekend-card">
-                    <div className="weekend-card-accent" style={{ background: info?.color }} />
-                    <div className="weekend-card-body">
-                      <span className="weekend-card-cat" style={{ color: info?.color }}>{ev.categoria}</span>
-                      <h3 className="weekend-card-titulo">{ev.titulo}</h3>
-                      <div className="weekend-card-meta">
-                        <span>📅 {formatFecha(ev.fechaInicio)}</span>
-                        <span>📍 {ev.lugar}</span>
-                      </div>
-                    </div>
-                  </Link>
-                )
-              })}
-            </div>
-          </div>
-        </section>
-      )}
 
       {/* ── Rutas curadas ── */}
       <section className="rutas-section">
