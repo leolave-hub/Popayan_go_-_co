@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react'
 import { EVENTOS, CATEGORIAS_INFO } from '../data/eventos'
+import SubmitEventModal from '../components/SubmitEventModal'
 
 const FILTROS_CAT = ['Todo', 'Arte', 'Gastronomía', 'Cultura', 'Turismo', 'Deportes']
 const FILTROS_EST = ['Todo', 'En curso', 'Próximo', 'Finalizado']
@@ -27,6 +28,7 @@ const formatFecha = (str) =>
 export default function Eventos() {
   const [cat, setCat] = useState('Todo')
   const [est, setEst] = useState('Todo')
+  const [modalAbierto, setModalAbierto] = useState(false)
 
   const filtrados = useMemo(() =>
     EVENTOS
@@ -45,8 +47,15 @@ export default function Eventos() {
   return (
     <div className="ev-page">
       <div className="ev-hero-band">
-        <h1>Eventos en Popayán</h1>
-        <p>Descubre todo lo que está pasando en la Ciudad Blanca</p>
+        <div className="ev-hero-content">
+          <div>
+            <h1>Eventos en Popayán</h1>
+            <p>Descubre todo lo que está pasando en la Ciudad Blanca</p>
+          </div>
+          <button className="ev-btn-postular" onClick={() => setModalAbierto(true)}>
+            + Postular evento
+          </button>
+        </div>
       </div>
 
       <div className="ev-container">
@@ -149,6 +158,8 @@ export default function Eventos() {
           )
         }
       </div>
+
+      <SubmitEventModal isOpen={modalAbierto} onClose={() => setModalAbierto(false)} />
     </div>
   )
 }
