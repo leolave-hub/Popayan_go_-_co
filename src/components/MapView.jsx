@@ -7,10 +7,17 @@ const INITIAL_ZOOM = 15
 const INITIAL_PITCH = 60
 const INITIAL_BEARING = -17
 
-export default function MapView({ puntos = [], activePunto = null, onPuntoClick = null }) {
+export default function MapView({
+  puntos = [],
+  activePunto = null,
+  onPuntoClick = null,
+  ruta = null,
+  userLocation = null,
+}) {
   const containerRef = useRef(null)
   const mapRef = useRef(null)
-  const markersRef = useRef([]) // [{ id, marker, el }]
+  const markersRef = useRef([])
+  const userMarkerRef = useRef(null)
   const [error, setError] = useState(null)
   const [mapReady, setMapReady] = useState(false)
 
@@ -47,12 +54,15 @@ export default function MapView({ puntos = [], activePunto = null, onPuntoClick 
     }
 
     return () => {
+      userMarkerRef.current?.remove()
+      userMarkerRef.current = null
       map?.remove()
       mapRef.current = null
       setMapReady(false)
     }
   }, [])
 
+  // Marcadores de puntos de interés
   useEffect(() => {
     if (!mapReady || !mapRef.current) return
 
@@ -89,6 +99,7 @@ export default function MapView({ puntos = [], activePunto = null, onPuntoClick 
     })
   }, [puntos, mapReady])
 
+  // Marcador activo
   useEffect(() => {
     if (!mapReady || !mapRef.current) return
 
@@ -108,6 +119,72 @@ export default function MapView({ puntos = [], activePunto = null, onPuntoClick 
       duration: 1000,
     })
   }, [activePunto, mapReady])
+
+  // Línea de ruta turística
+  useEffect(() => {
+    if (!mapReady || !mapRef.current) return
+    const map = mapRef.current
+
+    if (map.getLayer('ruta-line')) map.removeLayer('ruta-line')
+    if (map.getLayer('ruta-casing')) map.removeLayer('ruta-casing')
+    if (map.getSource('ruta')) map.removeSource('ruta')
+
+    if (!ruta) return
+
+    map.addSource('ruta', {
+      type: 'geojson',
+      data: { type: 'Feature', geometry: ruta },
+    })
+    map.addLayer({
+      id: 'ruta-casing',
+      type: 'line',
+      source: 'ruta',
+      layout: { 'line-join': 'round', 'line-cap': 'round' },
+      paint: { 'line-color': '#ffffff', 'line-width': 8, 'line-opacity': 0.8 },
+    })
+    map.addLayer({
+      id: 'ruta-line',
+      type: 'line',
+      source: 'ruta',
+      layout: { 'line-join': 'round', 'line-cap': 'round' },
+      paint: { 'line-color': '#3D88F5', 'line-width': 4 },
+    })
+
+    // Ajustar vista para mostrar toda la ruta
+    const coords = ruta.coordinates
+    if (coords?.length > 0) {
+      const lngs = coords.map(c => c[0])
+      const lats = coords.map(c => c[1])
+      map.fitBounds(
+        [
+          [Math.min(...lngs) - 0.002, Math.min(...lats) - 0.002],
+          [Math.max(...lngs) + 0.002, Math.max(...lats) + 0.002],
+        ],
+        { padding: 60, duration: 1400 }
+      )
+    }
+  }, [ruta, mapReady])
+
+  // Marcador de ubicación del usuario
+  useEffect(() => {
+    if (!mapReady || !mapRef.current) return
+
+    userMarkerRef.current?.remove()
+    userMarkerRef.current = null
+
+    if (!userLocation) return
+
+    const el = document.createElement('div')
+    el.className = 'user-location-dot'
+
+    userMarkerRef.current = new mapboxgl.Marker(el)
+      .setLngLat(userLocation)
+      .addTo(mapRef.current)
+
+    if (!ruta) {
+      mapRef.current.flyTo({ center: userLocation, zoom: 15, duration: 1200 })
+    }
+  }, [userLocation, mapReady])
 
   if (error) {
     return (

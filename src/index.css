@@ -1552,3 +1552,270 @@ button, input, select { font-family: inherit; }
   transition: background .15s;
 }
 .mapbox-popup-btn:hover { background: var(--terra-lt); }
+
+/* ─────────────────────────────────────────
+   14. RUTA TURÍSTICA
+───────────────────────────────────────── */
+
+/* Botón de activar ruta en el header del mapa */
+.mapa-header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.ruta-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 18px;
+  border-radius: 40px;
+  border: 1.5px solid var(--sage);
+  background: var(--white);
+  color: var(--sage);
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all .18s ease;
+  flex-shrink: 0;
+}
+.ruta-btn:hover { background: var(--sage); color: var(--white); }
+.ruta-btn.activa { background: var(--stone); border-color: var(--stone); color: var(--white); }
+
+/* Marcador de ubicación del usuario (punto azul pulsante) */
+.user-location-dot {
+  width: 18px;
+  height: 18px;
+  background: #3D88F5;
+  border-radius: 50%;
+  border: 3px solid #fff;
+  box-shadow: 0 0 0 3px rgba(61,136,245,.3), 0 2px 8px rgba(0,0,0,.3);
+  animation: pulse-location 2s ease-in-out infinite;
+}
+
+@keyframes pulse-location {
+  0%, 100% { box-shadow: 0 0 0 3px rgba(61,136,245,.3), 0 2px 8px rgba(0,0,0,.3); }
+  50%       { box-shadow: 0 0 0 9px rgba(61,136,245,.1), 0 2px 8px rgba(0,0,0,.3); }
+}
+
+/* Badges de estado de geolocalización */
+.geo-badge {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 40px;
+  letter-spacing: .03em;
+}
+.geo-badge--ok      { background: #e8f5e9; color: #388e3c; }
+.geo-badge--pidiendo { background: #fff3e0; color: #e65100; }
+.geo-badge--error   { background: #fce4ec; color: #c62828; }
+
+/* Panel interior (scroll de checkboxes) */
+.ruta-panel-inner {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+.ruta-panel-inner::-webkit-scrollbar { width: 4px; }
+.ruta-panel-inner::-webkit-scrollbar-track { background: transparent; }
+.ruta-panel-inner::-webkit-scrollbar-thumb { background: var(--cream-dk); border-radius: 4px; }
+
+/* Aviso de error de geolocalización */
+.ruta-geo-status {
+  padding: 8px 12px;
+  background: #fce4ec;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 11.5px;
+  color: #c62828;
+  flex-shrink: 0;
+}
+
+.btn-reintentar-geo {
+  font-size: 11px;
+  padding: 3px 10px;
+  background: transparent;
+  border: 1px solid #c62828;
+  border-radius: 6px;
+  cursor: pointer;
+  color: #c62828;
+  font-family: inherit;
+  transition: all .15s;
+  flex-shrink: 0;
+}
+.btn-reintentar-geo:hover { background: #c62828; color: #fff; }
+
+/* Texto de ayuda */
+.ruta-hint {
+  padding: 10px 12px 6px;
+  font-size: 11.5px;
+  color: var(--stone-lt);
+  font-weight: 500;
+  margin: 0;
+  flex-shrink: 0;
+}
+
+/* Lista de checkboxes de lugares */
+.ruta-check-list {
+  padding: 0 6px 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ruta-check-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 8px;
+  border-radius: 8px;
+  border: 1.5px solid transparent;
+  cursor: pointer;
+  transition: all .15s;
+  font-size: 13px;
+  color: var(--stone);
+  font-weight: 500;
+  background: transparent;
+  width: 100%;
+  text-align: left;
+  font-family: inherit;
+}
+.ruta-check-item:hover { background: var(--cream); border-color: var(--cream-dk); }
+.ruta-check-item.sel  { background: #edf7f1; border-color: var(--sage-lt); }
+
+.ruta-check-box {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  border: 2px solid var(--cream-dk);
+  background: var(--white);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 700;
+  transition: all .15s;
+  color: transparent;
+}
+.ruta-check-item.sel .ruta-check-box {
+  background: var(--sage);
+  border-color: var(--sage);
+  color: #fff;
+}
+
+/* Contador de lugares seleccionados */
+.ruta-sel-count {
+  font-size: 11px;
+  font-weight: 700;
+  background: var(--sage);
+  color: #fff;
+  padding: 2px 8px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+/* Footer del panel de ruta */
+.ruta-footer {
+  padding: 10px;
+  border-top: 1px solid var(--cream-dk);
+  background: var(--white);
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.btn-calcular-ruta {
+  width: 100%;
+  padding: 11px 14px;
+  background: var(--sage);
+  color: var(--white);
+  border: none;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .18s;
+  font-family: inherit;
+  letter-spacing: .01em;
+  line-height: 1.3;
+}
+.btn-calcular-ruta:hover:not(:disabled) { background: #6aa07a; }
+.btn-calcular-ruta:disabled { opacity: .45; cursor: not-allowed; }
+
+.btn-limpiar-ruta {
+  width: 100%;
+  padding: 9px 14px;
+  background: transparent;
+  color: var(--stone-lt);
+  border: 1.5px solid var(--cream-dk);
+  border-radius: 10px;
+  font-size: 12.5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all .15s;
+  font-family: inherit;
+}
+.btn-limpiar-ruta:hover { border-color: var(--terra-lt); color: var(--terra); }
+
+/* Lista de pasos de la ruta calculada */
+.ruta-pasos-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.ruta-pasos-list::-webkit-scrollbar { width: 4px; }
+.ruta-pasos-list::-webkit-scrollbar-thumb { background: var(--cream-dk); border-radius: 4px; }
+
+.ruta-paso {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 8px 6px;
+  position: relative;
+}
+.ruta-paso:not(:last-child)::before {
+  content: '';
+  position: absolute;
+  left: 17px;
+  top: 34px;
+  bottom: -4px;
+  width: 2px;
+  background: var(--cream-dk);
+}
+
+.ruta-paso-num {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--sage);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: 2px solid #fff;
+  box-shadow: 0 1px 4px rgba(0,0,0,.15);
+  margin-top: 2px;
+}
+
+.ruta-paso-info { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+.ruta-paso-nombre { font-size: 12.5px; font-weight: 600; color: var(--stone); line-height: 1.3; }
+.ruta-paso-cat   { font-size: 10.5px; color: var(--stone-lt); }
+
+@media (max-width: 768px) {
+  .mapa-header-right { flex-direction: column; align-items: flex-start; gap: 8px; width: 100%; }
+  .ruta-btn { align-self: flex-start; }
+}
